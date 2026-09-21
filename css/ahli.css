@@ -1,0 +1,1281 @@
+/* ==========================================================================
+   DM3 MANAGEMENT SYSTEM
+   AJK MODULE - V4.3 CLEAN
+   File: css/ajk.css
+   Persatuan Penduduk Desa Mentari 3
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. AJK DATA CARD
+   ========================================================================== */
+
+#page-ajk .data-card {
+
+    width: 100%;
+
+    overflow: hidden;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    background:
+        var(--white);
+
+    box-shadow:
+        var(--shadow-sm);
+
+}
+
+
+/* ==========================================================================
+   2. AJK TABLE
+   ========================================================================== */
+
+#page-ajk .table-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+#page-ajk .data-table {
+
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+
+}
+
+
+/* --------------------------------------------------------------------------
+   HEADER
+   -------------------------------------------------------------------------- */
+
+#page-ajk .data-table th {
+
+    padding:
+        12px 12px;
+
+    background:
+        #f7f9fc;
+
+    border-bottom:
+        1px solid var(--border);
+
+    color:
+        var(--text-light);
+
+    text-align:
+        left;
+
+    white-space:
+        nowrap;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+/* --------------------------------------------------------------------------
+   BODY
+   -------------------------------------------------------------------------- */
+
+#page-ajk .data-table td {
+
+    padding:
+        11px 12px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    color:
+        var(--text);
+
+    vertical-align:
+        middle;
+
+    font-size:
+        11px;
+
+}
+
+
+#page-ajk .data-table tbody tr {
+
+    transition:
+        var(--transition);
+
+}
+
+
+#page-ajk .data-table tbody tr:hover {
+
+    background:
+        #f8fafc;
+
+}
+
+
+#page-ajk .data-table tbody tr:last-child td {
+
+    border-bottom:
+        none;
+
+}
+
+
+/* ==========================================================================
+   3. COLUMN WIDTH
+   ========================================================================== */
+
+/*
+   7 COLUMN:
+   Bil.
+   Gambar
+   Nama
+   Jawatan
+   No. Rumah
+   Status
+   Tindakan
+*/
+
+#page-ajk .ajk-col-bil,
+#page-ajk .data-table th:nth-child(1) {
+
+    width:
+        60px;
+
+}
+
+
+#page-ajk .ajk-col-gambar,
+#page-ajk .data-table th:nth-child(2) {
+
+    width:
+        90px;
+
+}
+
+
+#page-ajk .ajk-col-nama,
+#page-ajk .data-table th:nth-child(3) {
+
+    width:
+        24%;
+
+}
+
+
+#page-ajk .ajk-col-jawatan,
+#page-ajk .data-table th:nth-child(4) {
+
+    width:
+        20%;
+
+}
+
+
+#page-ajk .ajk-col-rumah,
+#page-ajk .data-table th:nth-child(5) {
+
+    width:
+        15%;
+
+}
+
+
+#page-ajk .ajk-col-status,
+#page-ajk .data-table th:nth-child(6) {
+
+    width:
+        12%;
+
+}
+
+
+#page-ajk .ajk-col-action,
+#page-ajk .data-table th:nth-child(7) {
+
+    width:
+        100px;
+
+}
+
+
+/* ==========================================================================
+   4. AJK NAME
+   ========================================================================== */
+
+#page-ajk .ajk-col-nama strong {
+
+    display:
+        block;
+
+    color:
+        var(--text-dark);
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+}
+
+
+/* ==========================================================================
+   5. AJK POSITION
+   ========================================================================== */
+
+#page-ajk .ajk-position {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        25px;
+
+    padding:
+        4px 8px;
+
+    border-radius:
+        6px;
+
+    background:
+        #eef4ff;
+
+    color:
+        var(--primary-dark);
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+}
+
+
+/* ==========================================================================
+   6. AJK PHOTO - TABLE
+   ========================================================================== */
+
+.ajk-table-photo {
+
+    width:
+        48px;
+
+    height:
+        48px;
+
+    overflow:
+        hidden;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        10px;
+
+    background:
+        #eef2f7;
+
+    border:
+        1px solid #dce3ec;
+
+}
+
+
+.ajk-table-photo img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    display:
+        block;
+
+    object-fit:
+        cover;
+
+}
+
+
+.ajk-table-photo.no-photo {
+
+    color:
+        #9aa6b2;
+
+}
+
+
+.ajk-table-photo.no-photo i {
+
+    font-size:
+        18px;
+
+}
+
+
+.ajk-table-photo img.image-error {
+
+    display:
+        none;
+
+}
+
+
+.ajk-photo-error {
+
+    color:
+        #9aa6b2;
+
+}
+
+
+.ajk-photo-error i {
+
+    font-size:
+        17px;
+
+}
+
+
+/* ==========================================================================
+   7. AJK ACTION BUTTONS
+   ========================================================================== */
+
+.ajk-actions {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+}
+
+
+.ajk-action-btn {
+
+    width:
+        32px;
+
+    height:
+        32px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        7px;
+
+    background:
+        #f1f5f9;
+
+    color:
+        var(--text-light);
+
+    transition:
+        var(--transition);
+
+}
+
+
+.ajk-action-btn:hover {
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.ajk-action-btn.edit:hover {
+
+    background:
+        #e7f0ff;
+
+    color:
+        var(--primary);
+
+}
+
+
+.ajk-action-btn.delete:hover {
+
+    background:
+        var(--danger-light);
+
+    color:
+        var(--danger);
+
+}
+
+
+.ajk-action-btn i {
+
+    font-size:
+        11px;
+
+}
+
+
+/* ==========================================================================
+   8. AJK EMPTY TABLE
+   ========================================================================== */
+
+#page-ajk .empty-table {
+
+    padding:
+        0 !important;
+
+    text-align:
+        center;
+
+}
+
+
+.ajk-empty-row {
+
+    min-height:
+        180px;
+
+    padding:
+        30px 20px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    color:
+        var(--text-muted);
+
+}
+
+
+.ajk-empty-row i {
+
+    margin-bottom:
+        10px;
+
+    font-size:
+        28px;
+
+    opacity:
+        0.55;
+
+}
+
+
+.ajk-empty-row strong {
+
+    color:
+        var(--text);
+
+    font-size:
+        12px;
+
+}
+
+
+.ajk-empty-row span {
+
+    margin-top:
+        4px;
+
+    font-size:
+        10px;
+
+}
+
+
+/* ==========================================================================
+   9. AJK MODAL
+   ========================================================================== */
+
+#ajk-modal {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        5000;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        20px;
+
+}
+
+
+#ajk-modal.hidden {
+
+    display:
+        none;
+
+}
+
+
+#ajk-modal .modal-overlay {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background:
+        rgba(5, 15, 30, 0.60);
+
+    backdrop-filter:
+        blur(3px);
+
+}
+
+
+.ajk-modal-dialog {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    width:
+        680px;
+
+    max-width:
+        100%;
+
+    max-height:
+        90vh;
+
+    overflow-y:
+        auto;
+
+    border-radius:
+        16px;
+
+    background:
+        var(--white);
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.25);
+
+    animation:
+        ajkModalIn 0.25s ease;
+
+}
+
+
+@keyframes ajkModalIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(15px)
+            scale(0.97);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* ==========================================================================
+   10. AJK MODAL HEADER
+   ========================================================================== */
+
+#ajk-modal .modal-header {
+
+    padding:
+        18px 20px;
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+#ajk-modal .modal-header h3 {
+
+    font-size:
+        15px;
+
+    font-weight:
+        800;
+
+}
+
+
+#ajk-modal .modal-header p {
+
+    margin-top:
+        3px;
+
+    font-size:
+        10px;
+
+    color:
+        var(--text-light);
+
+}
+
+
+/* ==========================================================================
+   11. AJK FORM
+   ========================================================================== */
+
+#ajk-form {
+
+    width:
+        100%;
+
+}
+
+
+#ajk-form .ajk-form-body {
+
+    padding:
+        20px;
+
+}
+
+
+#ajk-form .form-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        15px;
+
+}
+
+
+#ajk-form .form-group {
+
+    margin:
+        0;
+
+}
+
+
+#ajk-form .form-group.full {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+#ajk-form label {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        5px;
+
+    margin-bottom:
+        7px;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    color:
+        var(--text-dark);
+
+}
+
+
+#ajk-form label span {
+
+    color:
+        var(--danger);
+
+}
+
+
+/* ==========================================================================
+   12. AJK FORM INPUT
+   ========================================================================== */
+
+#ajk-form input,
+#ajk-form select {
+
+    width:
+        100%;
+
+    min-height:
+        42px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid var(--border-dark);
+
+    border-radius:
+        8px;
+
+    background:
+        var(--white);
+
+    color:
+        var(--text-dark);
+
+    font-size:
+        12px;
+
+    transition:
+        var(--transition);
+
+}
+
+
+#ajk-form input:focus,
+#ajk-form select:focus {
+
+    border-color:
+        var(--primary);
+
+    outline:
+        none;
+
+    box-shadow:
+        0 0 0 3px rgba(11, 94, 215, 0.09);
+
+}
+
+
+/* ==========================================================================
+   13. SELECTED MEMBER INFORMATION
+   ========================================================================== */
+
+.ajk-member-info {
+
+    margin-top:
+        10px;
+
+    padding:
+        13px;
+
+    border:
+        1px solid #dce8fa;
+
+    border-radius:
+        10px;
+
+    background:
+        #f6f9ff;
+
+}
+
+
+.ajk-member-info-title {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    margin-bottom:
+        10px;
+
+    color:
+        var(--primary);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+.ajk-member-info-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap:
+        10px;
+
+}
+
+
+.ajk-member-info-grid > div {
+
+    min-width:
+        0;
+
+}
+
+
+.ajk-member-info-grid span {
+
+    display:
+        block;
+
+    margin-bottom:
+        3px;
+
+    color:
+        var(--text-light);
+
+    font-size:
+        9px;
+
+}
+
+
+.ajk-member-info-grid strong {
+
+    display:
+        block;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    color:
+        var(--text-dark);
+
+    font-size:
+        10px;
+
+}
+
+
+.ajk-member-info-empty {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        10px;
+
+}
+
+
+/* ==========================================================================
+   14. IMAGE FORM
+   ========================================================================== */
+
+.ajk-image-form-group {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+.ajk-image-form-group input {
+
+    font-size:
+        11px;
+
+}
+
+
+.ajk-image-help {
+
+    margin-top:
+        5px;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        9px;
+
+    line-height:
+        1.5;
+
+}
+
+
+.ajk-image-help i {
+
+    color:
+        var(--primary);
+
+}
+
+
+/* ==========================================================================
+   15. IMAGE PREVIEW
+   ========================================================================== */
+
+.ajk-gambar-preview {
+
+    min-height:
+        175px;
+
+    margin-top:
+        10px;
+
+    padding:
+        12px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px dashed #cbd5e1;
+
+    border-radius:
+        12px;
+
+    background:
+        #f8fafc;
+
+}
+
+
+.ajk-image-preview {
+
+    width:
+        150px;
+
+    height:
+        150px;
+
+    border-radius:
+        12px;
+
+    object-fit:
+        cover;
+
+    border:
+        1px solid #dbe4f0;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+}
+
+
+.ajk-image-empty {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        7px;
+
+    color:
+        var(--text-muted);
+
+    text-align:
+        center;
+
+    font-size:
+        10px;
+
+}
+
+
+.ajk-image-empty i {
+
+    font-size:
+        24px;
+
+    opacity:
+        0.55;
+
+}
+
+
+/* ==========================================================================
+   16. MODAL FOOTER
+   ========================================================================== */
+
+#ajk-form .modal-footer {
+
+    padding:
+        14px 20px;
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        8px;
+
+    border-top:
+        1px solid var(--border);
+
+}
+
+
+/* ==========================================================================
+   17. DISABLED
+   ========================================================================== */
+
+#ajk-form button:disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity:
+        0.65;
+
+}
+
+
+/* ==========================================================================
+   18. MOBILE
+   ========================================================================== */
+
+@media (max-width: 700px) {
+
+    #page-ajk .page-heading {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+
+    #page-ajk .page-heading .primary-button {
+
+        width:
+            100%;
+
+    }
+
+
+    #ajk-form .form-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    #ajk-form .form-group.full,
+    .ajk-image-form-group {
+
+        grid-column:
+            auto;
+
+    }
+
+
+    .ajk-member-info-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .ajk-modal-dialog {
+
+        width:
+            100%;
+
+        max-height:
+            94vh;
+
+    }
+
+}
+
+
+/* ==========================================================================
+   19. VERY SMALL MOBILE
+   ========================================================================== */
+
+@media (max-width: 450px) {
+
+    #ajk-modal {
+
+        padding:
+            10px;
+
+    }
+
+
+    #ajk-modal .modal-header {
+
+        padding:
+            15px;
+
+    }
+
+
+    #ajk-form .ajk-form-body {
+
+        padding:
+            15px;
+
+    }
+
+
+    #ajk-form .modal-footer {
+
+        padding:
+            12px 15px;
+
+    }
+
+
+    .ajk-gambar-preview {
+
+        min-height:
+            150px;
+
+    }
+
+
+    .ajk-image-preview {
+
+        width:
+            125px;
+
+        height:
+            125px;
+
+    }
+
+}
+
+
+/* ==========================================================================
+   END AJK V4.3 CLEAN
+   ========================================================================== */

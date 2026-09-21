@@ -1,0 +1,1163 @@
+/* ============================================================
+   DM3 MANAGEMENT SYSTEM
+   RFID.CSS V1.2 FULL CLEAN
+   Persatuan Penduduk Desa Mentari 3
+
+   BAHAGIAN:
+   1. RFID PAGE LAYOUT
+   2. STATUS BADGE
+   3. RFID GRID
+   4. RFID PANEL
+   5. READER BOX
+   6. SCAN RESULT (kecil)
+   7. PROGRAM SELECT (Page utama)
+   8. ATTENDANCE TABLE
+   9. MODAL GENERIK (Test / Manual Attendance)
+   10. LIVE SCAN SCREEN — FUTURISTIC FULLSCREEN
+   11. LIVE SCAN — DROPDOWN PROGRAM
+   12. RESPONSIVE
+============================================================ */
+
+
+/* ============================================================
+   1. RFID PAGE LAYOUT
+============================================================ */
+
+#page-rfid .page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   2. STATUS BADGE
+============================================================ */
+
+.rfid-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .4px;
+    transition: background .2s, color .2s;
+}
+
+.rfid-status i {
+    font-size: 8px;
+}
+
+.rfid-status.connected {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+
+/* ============================================================
+   3. RFID GRID (2 KOLUM)
+============================================================ */
+
+.rfid-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+
+/* ============================================================
+   4. RFID PANEL
+============================================================ */
+
+.rfid-panel {
+    background: #ffffff;
+    border: 1px solid #e5eaf1;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, .035);
+}
+
+.rfid-panel h3 {
+    margin: 0 0 16px;
+    font-size: 16px;
+    color: #172033;
+}
+
+
+/* ============================================================
+   5. READER BOX
+============================================================ */
+
+.rfid-reader-box {
+    padding: 30px 20px;
+    text-align: center;
+    border: 2px dashed #cbd5e1;
+    border-radius: 14px;
+    background: #f8fafc;
+    transition: border-color .2s;
+}
+
+.rfid-reader-box:hover {
+    border-color: #2563eb;
+}
+
+.rfid-reader-box > i {
+    font-size: 42px;
+    color: #2563eb;
+    margin-bottom: 12px;
+    display: block;
+}
+
+#rfidReaderMessage {
+    color: #475569;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.rfid-reader-box > div:last-child {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   6. SCAN RESULT (kecil, dalam reader box)
+============================================================ */
+
+.scan-result {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    animation: scanResultIn .25s ease;
+}
+
+.scan-result.hidden {
+    display: none;
+}
+
+.scan-result strong {
+    display: block;
+    font-size: 16px;
+    color: #172033;
+    margin-bottom: 5px;
+}
+
+.scan-result div {
+    font-size: 13px;
+    color: #475569;
+}
+
+@keyframes scanResultIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ============================================================
+   7. PROGRAM SELECT (Page utama — Kehadiran RFID)
+============================================================ */
+
+#rfidProgramSelect {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #d7dee9;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #172033;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+#rfidProgramSelect:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
+}
+
+
+/* ============================================================
+   8. ATTENDANCE TABLE CONTAINER
+============================================================ */
+
+#attendanceTableContainer {
+    margin-top: 16px;
+    min-height: 180px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 0;
+    border: 1px solid #e5eaf1;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+#attendanceTableContainer .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+#attendanceTableContainer .data-table th {
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 800;
+    color: #334155;
+    border-bottom: 1px solid #e5eaf1;
+}
+
+#attendanceTableContainer .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #172033;
+}
+
+#attendanceTableContainer .data-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* ============================================================
+   9. MODAL GENERIK (Test / Manual Attendance)
+============================================================ */
+
+#rfidTestPanel,
+#manualAttendanceModal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+}
+
+#rfidTestPanel.hidden,
+#manualAttendanceModal.hidden {
+    display: none !important;
+}
+
+#rfidTestPanel .modal-overlay,
+#manualAttendanceModal .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, .62);
+    backdrop-filter: blur(2px);
+}
+
+#rfidTestPanel .modal-dialog,
+#manualAttendanceModal .modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(560px, 100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, .30);
+    animation: rfidModalIn .18s ease;
+}
+
+@keyframes rfidModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ============================================================
+   10. LIVE SCAN SCREEN — FUTURISTIC FULLSCREEN
+============================================================ */
+
+.live-scan-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 200000;
+    background: radial-gradient(ellipse at center, #0a1628 0%, #030812 100%);
+    color: #e0f2ff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.live-scan-screen.hidden {
+    display: none !important;
+}
+
+/* ---- Grid Background ---- */
+
+.live-scan-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 200, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 255, 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridShift 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes gridShift {
+    from { background-position: 0 0; }
+    to { background-position: 60px 60px; }
+}
+
+/* ---- Header ---- */
+
+.live-scan-header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 32px;
+    background: linear-gradient(180deg, rgba(0, 60, 120, 0.4), transparent);
+    border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.live-scan-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #00d4ff;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+    flex-shrink: 0;
+}
+
+.live-scan-title i {
+    font-size: 22px;
+}
+
+.live-scan-dot {
+    width: 10px;
+    height: 10px;
+    background: #00ff88;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88;
+    animation: pulseDot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.live-scan-header-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.live-scan-icon-btn {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    border-radius: 12px;
+    background: rgba(0, 100, 200, 0.15);
+    color: #00d4ff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.live-scan-icon-btn:hover {
+    background: rgba(0, 200, 255, 0.25);
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.live-scan-close:hover {
+    background: rgba(255, 50, 80, 0.25);
+    border-color: rgba(255, 50, 80, 0.5);
+    color: #ff4060;
+    box-shadow: 0 0 20px rgba(255, 50, 80, 0.5);
+}
+
+/* ---- Body Layout ---- */
+
+.live-scan-body {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    overflow: hidden;
+}
+
+.live-scan-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+}
+
+/* ---- Idle State ---- */
+
+.scan-idle {
+    position: relative;
+    width: 380px;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.scan-pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    border: 2px solid rgba(0, 200, 255, 0.6);
+    border-radius: 50%;
+    animation: pulseRing 3s ease-out infinite;
+}
+
+.scan-pulse-ring.delay-1 { animation-delay: 1s; }
+.scan-pulse-ring.delay-2 { animation-delay: 2s; }
+
+@keyframes pulseRing {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+        border-color: rgba(0, 200, 255, 0.8);
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+        border-color: rgba(0, 200, 255, 0);
+    }
+}
+
+.scan-idle-icon {
+    position: relative;
+    z-index: 2;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #0e2b52, #041020);
+    border: 2px solid rgba(0, 200, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00d4ff;
+    font-size: 56px;
+    box-shadow:
+        0 0 40px rgba(0, 200, 255, 0.4),
+        inset 0 0 30px rgba(0, 200, 255, 0.2);
+    animation: idleFloat 3s ease-in-out infinite;
+}
+
+@keyframes idleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.scan-idle-text {
+    position: relative;
+    z-index: 2;
+    margin-top: 40px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #00d4ff;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+}
+
+.scan-idle-sub {
+    position: relative;
+    z-index: 2;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #7dd3fc;
+    letter-spacing: 1px;
+    opacity: 0.7;
+}
+
+/* ============================================================
+   SCAN BIG CLOCK — Jam Besar Di Tengah Skrin
+   Untuk peserta nampak pukul berapa mereka scan masuk
+============================================================ */
+
+.scan-big-clock {
+    position: relative;
+    z-index: 2;
+    margin-top: 30px;
+    padding: 16px 40px;
+    background: rgba(0, 200, 255, 0.06);
+    border: 1px solid rgba(0, 200, 255, 0.30);
+    border-radius: 16px;
+    box-shadow:
+        0 0 30px rgba(0, 200, 255, 0.20),
+        inset 0 0 20px rgba(0, 200, 255, 0.05);
+    backdrop-filter: blur(6px);
+    font-family: 'Courier New', 'Consolas', monospace;
+    text-align: center;
+}
+
+.scan-big-clock-time {
+    font-size: 56px;
+    font-weight: 900;
+    color: #00d4ff;
+    letter-spacing: 6px;
+    line-height: 1;
+    text-shadow:
+        0 0 20px rgba(0, 212, 255, 0.9),
+        0 0 40px rgba(0, 212, 255, 0.5),
+        0 0 60px rgba(0, 212, 255, 0.3);
+    font-variant-numeric: tabular-nums;
+    animation: clockGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes clockGlow {
+    from {
+        text-shadow:
+            0 0 20px rgba(0, 212, 255, 0.9),
+            0 0 40px rgba(0, 212, 255, 0.5),
+            0 0 60px rgba(0, 212, 255, 0.3);
+    }
+    to {
+        text-shadow:
+            0 0 25px rgba(0, 212, 255, 1),
+            0 0 50px rgba(0, 212, 255, 0.7),
+            0 0 80px rgba(0, 212, 255, 0.4);
+    }
+}
+
+.scan-big-clock-date {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #7dd3fc;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+/* Responsive: skrin kecil */
+@media (max-width: 900px) {
+    .scan-big-clock {
+        padding: 12px 24px;
+        margin-top: 20px;
+    }
+    .scan-big-clock-time {
+        font-size: 40px;
+        letter-spacing: 4px;
+    }
+    .scan-big-clock-date {
+        font-size: 12px;
+        letter-spacing: 3px;
+    }
+}
+
+@media (max-width: 600px) {
+    .scan-big-clock {
+        padding: 10px 18px;
+        margin-top: 16px;
+    }
+    .scan-big-clock-time {
+        font-size: 30px;
+        letter-spacing: 3px;
+    }
+    .scan-big-clock-date {
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
+}
+
+/* ---- Success Card ---- */
+
+.scan-result-card {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    padding: 40px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(0, 100, 180, 0.15), rgba(0, 200, 255, 0.05));
+    border: 1px solid rgba(0, 255, 150, 0.4);
+    box-shadow:
+        0 0 60px rgba(0, 255, 150, 0.3),
+        inset 0 0 40px rgba(0, 200, 255, 0.05);
+    text-align: center;
+    animation: cardIn 2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(20px);
+}
+
+.scan-result-card.hidden {
+    display: none !important;
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: scale(0.85) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.scan-success-ring {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 24px;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, #00ff88, #00d4ff, #00ff88) border-box;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: successSpin 3s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes successSpin {
+    from { filter: hue-rotate(0deg); }
+    to { filter: hue-rotate(360deg); }
+}
+
+.scan-photo-wrap {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 20px;
+}
+
+.scan-photo,
+.scan-photo-placeholder {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00ff88;
+    box-shadow: 0 0 40px rgba(0, 255, 150, 0.6);
+}
+
+.scan-photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, #0e2b52, #041020);
+    color: #00d4ff;
+    font-size: 60px;
+}
+
+.scan-photo-check {
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #00ff88;
+    color: #041020;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 3px solid #041020;
+    box-shadow: 0 0 25px #00ff88;
+    animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+@keyframes checkPop {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+.scan-name {
+    font-size: 32px;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+    margin-bottom: 6px;
+}
+
+.scan-position {
+    font-size: 15px;
+    color: #00ff88;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+}
+
+.scan-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 26px;
+}
+
+.scan-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 12px;
+    background: rgba(0, 200, 255, 0.05);
+    border: 1px solid rgba(0, 200, 255, 0.2);
+    border-radius: 12px;
+    text-align: left;
+}
+
+.scan-info-item i {
+    color: #00d4ff;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.scan-info-item div {
+    min-width: 0;
+}
+
+.scan-info-item span {
+    display: block;
+    font-size: 10px;
+    color: #7dd3fc;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.scan-info-item strong {
+    display: block;
+    font-size: 15px;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scan-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, rgba(0, 255, 150, 0.15), rgba(0, 212, 255, 0.15));
+    border: 1px solid rgba(0, 255, 150, 0.5);
+    border-radius: 999px;
+    color: #00ff88;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    box-shadow: 0 0 30px rgba(0, 255, 150, 0.3);
+}
+
+.scan-status.warning {
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.15), rgba(255, 150, 0, 0.15));
+    border-color: rgba(255, 200, 0, 0.5);
+    color: #ffc800;
+    box-shadow: 0 0 30px rgba(255, 200, 0, 0.3);
+}
+
+.scan-status.danger {
+    background: linear-gradient(135deg, rgba(255, 50, 80, 0.15), rgba(200, 0, 50, 0.15));
+    border-color: rgba(255, 50, 80, 0.5);
+    color: #ff4060;
+    box-shadow: 0 0 30px rgba(255, 50, 80, 0.3);
+}
+
+/* ---- Sidebar — Recent Scans ---- */
+
+.live-scan-sidebar {
+    border-left: 1px solid rgba(0, 200, 255, 0.2);
+    background: linear-gradient(180deg, rgba(0, 30, 60, 0.4), rgba(0, 10, 30, 0.6));
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.scan-sidebar-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #00d4ff;
+    text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+    margin-bottom: 16px;
+}
+
+.scan-recent-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.scan-recent-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.scan-recent-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 200, 255, 0.4);
+    border-radius: 4px;
+}
+
+.scan-empty {
+    color: #7dd3fc;
+    font-size: 12px;
+    text-align: center;
+    padding: 30px 10px;
+    opacity: 0.5;
+    letter-spacing: 1px;
+}
+
+.scan-recent-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: rgba(0, 200, 255, 0.06);
+    border-left: 3px solid #00ff88;
+    border-radius: 8px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.scan-recent-photo {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00ff88;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(0, 255, 150, 0.5);
+}
+
+.scan-recent-photo-placeholder {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #0e2b52;
+    border: 2px solid #00ff88;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00d4ff;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.scan-recent-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.scan-recent-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scan-recent-meta {
+    font-size: 10px;
+    color: #7dd3fc;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.scan-stats {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 200, 255, 0.2);
+}
+
+.scan-stat {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, rgba(0, 255, 150, 0.1), rgba(0, 212, 255, 0.1));
+    border: 1px solid rgba(0, 255, 150, 0.4);
+    border-radius: 12px;
+}
+
+.scan-stat span {
+    font-size: 11px;
+    color: #7dd3fc;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.scan-stat strong {
+    font-size: 26px;
+    color: #00ff88;
+    font-weight: 900;
+    text-shadow: 0 0 20px rgba(0, 255, 150, 0.6);
+}
+
+
+/* ============================================================
+   11. LIVE SCAN — DROPDOWN PROGRAM
+   (gaya dropdown futuristik dalam header Live Scan)
+============================================================ */
+
+.live-scan-program {
+    font-size: 15px;
+    color: #7dd3fc;
+    padding: 8px 36px 8px 20px;
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    border-radius: 30px;
+    background: rgba(0, 100, 200, 0.15);
+    letter-spacing: 1px;
+    font-weight: 600;
+    min-width: 240px;
+    text-align: center;
+
+    /* Buang gaya default dropdown */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    outline: none;
+
+    /* Arrow custom (SVG cyan) */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300d4ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+}
+
+.live-scan-program option {
+    background: #0a1628;
+    color: #e0f2ff;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.live-scan-program:hover,
+.live-scan-program:focus {
+    background-color: rgba(0, 200, 255, 0.25);
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.5);
+    color: #ffffff;
+}
+
+/* ============================================================
+   11b. LIVE SCAN — TAYANGAN MASA & TARIKH SEBENAR
+============================================================ */
+
+.live-scan-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 22px;
+    background: rgba(0, 100, 200, 0.15);
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    border-radius: 12px;
+    box-shadow:
+        0 0 20px rgba(0, 200, 255, 0.25),
+        inset 0 0 15px rgba(0, 200, 255, 0.08);
+    font-family: 'Courier New', 'Consolas', monospace;
+    flex-shrink: 0;
+}
+
+.live-scan-clock-time {
+    font-size: 24px;
+    font-weight: 700;
+    color: #00d4ff;
+    letter-spacing: 3px;
+    text-shadow:
+        0 0 12px rgba(0, 212, 255, 0.8),
+        0 0 24px rgba(0, 212, 255, 0.4);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.live-scan-clock-date {
+    font-size: 11px;
+    color: #7dd3fc;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    opacity: 0.9;
+    font-weight: 600;
+}
+
+/* ============================================================
+   12. RESPONSIVE
+============================================================ */
+
+@media (max-width: 1000px) {
+    .live-scan-body {
+        grid-template-columns: 1fr;
+    }
+    .live-scan-sidebar {
+        display: none;
+    }
+    .scan-name { font-size: 24px; }
+    .scan-info-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+    .rfid-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .rfid-panel {
+        padding: 16px;
+    }
+
+    .rfid-reader-box {
+        padding: 22px 14px;
+    }
+
+    .rfid-reader-box > i {
+        font-size: 34px;
+    }
+
+    .rfid-status {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .scan-result-card {
+        padding: 24px;
+    }
+
+    .scan-name {
+        font-size: 22px;
+    }
+
+    .scan-info-item strong {
+        font-size: 13px;
+    }
+
+    .live-scan-header {
+        padding: 14px 16px;
+        flex-wrap: wrap;
+    }
+
+    .live-scan-title {
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+
+    .live-scan-program {
+        font-size: 12px;
+        padding: 6px 30px 6px 14px;
+        min-width: 180px;
+    }
+
+    .live-scan-icon-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 15px;
+    }
+
+        .live-scan-clock {
+        padding: 5px 12px;
+    }
+
+    .live-scan-clock-time {
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+
+    .live-scan-clock-date {
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+
+    /* ============================================================
+   SCAN RESULT CARD — ANIMASI KELUAR (2 SAAT)
+   Kad hilang dengan smooth selepas 8 saat
+   ============================================================ */
+
+.scan-result-card.scan-exiting {
+    animation: scanCardExit 2s ease-in forwards;
+}
+
+@keyframes scanCardExit {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+    }
+
+    30% {
+        opacity: 0.9;
+        transform: scale(1.02) translateY(-5px);
+        filter: blur(1px);
+    }
+
+    60% {
+        opacity: 0.5;
+        transform: scale(0.98) translateY(-20px);
+        filter: blur(4px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.9) translateY(-60px);
+        filter: blur(10px);
+    }
+}
+
+}

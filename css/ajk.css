@@ -1,0 +1,527 @@
+/* ============================================================
+   DM3 MANAGEMENT SYSTEM
+   AJK.CSS V4.3 CLEAN
+   Persatuan Penduduk Desa Mentari 3
+============================================================ */
+
+
+/* ============================================================
+   AJK TABLE CONTAINER (UNTUK SCROLL KIRI/KANAN)
+============================================================ */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+
+/* ============================================================
+   AJK TABLE UTAMA
+============================================================ */
+
+#ajkTable {
+  width: 100%;
+  /* Naikkan min-width supaya jadual sentiasa lebar & boleh scroll */
+  min-width: 1300px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+#ajkTable th,
+#ajkTable td {
+  vertical-align: middle;
+}
+
+/* Tetapkan Lebar Setiap Lajur (7 Lajur) */
+/* 1. Bil. */
+#ajkTable th:nth-child(1),
+#ajkTable td:nth-child(1) {
+  width: 60px;
+  text-align: center;
+}
+
+/* 2. Nama (DIBESARKAN) */
+#ajkTable th:nth-child(2),
+#ajkTable td:nth-child(2) {
+  width: 350px;
+}
+
+/* 3. UID RFID */
+#ajkTable th:nth-child(3),
+#ajkTable td:nth-child(3) {
+  width: 200px;
+  white-space: nowrap;
+}
+
+/* 4. No. Rumah */
+#ajkTable th:nth-child(4),
+#ajkTable td:nth-child(4) {
+  width: 130px;
+}
+
+/* 5. Jawatan */
+#ajkTable th:nth-child(5),
+#ajkTable td:nth-child(5) {
+  width: 200px;
+}
+
+/* 6. Status */
+#ajkTable th:nth-child(6),
+#ajkTable td:nth-child(6) {
+  width: 100px;
+  text-align: center;
+}
+
+/* 7. Tindakan */
+#ajkTable th:nth-child(7),
+#ajkTable td:nth-child(7) {
+  width: 130px;
+  text-align: center;
+}
+
+/* Gaya Asas Table */
+.ajk-table th {
+  font-weight: 800;
+  color: #1f2937;
+  background: #f8fafc;
+}
+
+.ajk-table td {
+  vertical-align: middle;
+}
+
+
+/* ============================================================
+   AJK NAME & TEXT (HALANG PECAH KE BAWAH)
+============================================================ */
+
+.ajk-name {
+  font-weight: 800;
+  color: #172033;
+  /* PENTING: Halang teks pecah ke bawah */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ajk-position {
+  font-weight: 700;
+  color: #2563eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ajk-portfolio {
+  color: #475569;
+}
+
+.ajk-rfid {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+.ajk-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 5px 10px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.ajk-status.active {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.ajk-status.inactive {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+
+/* ============================================================
+   AJK ACTIONS
+============================================================ */
+
+.ajk-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.ajk-action-btn {
+  width: 34px;
+  height: 34px;
+
+  border: 0;
+  border-radius: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition:
+    transform .15s ease,
+    opacity .15s ease;
+}
+
+.ajk-action-btn:hover {
+  transform: translateY(-1px);
+  opacity: .9;
+}
+
+.ajk-edit-btn {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.ajk-delete-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.ajk-empty {
+  text-align: center;
+  padding: 40px 20px !important;
+  color: #64748b;
+}
+
+.ajk-empty i {
+  display: block;
+  font-size: 36px;
+  margin-bottom: 12px;
+  opacity: .45;
+}
+
+.ajk-empty strong {
+  display: block;
+  color: #334155;
+  margin-bottom: 5px;
+}
+
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+#ajk-modal {
+  position: fixed;
+  inset: 0;
+
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+}
+
+#ajk-modal.hidden {
+  display: none !important;
+}
+
+#ajk-modal .modal-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(15, 23, 42, .65);
+
+  backdrop-filter: blur(2px);
+}
+
+#ajk-modal .modal-dialog {
+  position: relative;
+
+  width: min(720px, 100%);
+  max-height: 92vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, .30);
+
+  animation: ajkModalIn .18s ease;
+}
+
+@keyframes ajkModalIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+}
+
+
+/* ============================================================
+   MODAL HEADER
+============================================================ */
+
+#ajk-modal .modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 20px;
+
+  border-bottom: 1px solid #e8edf4;
+}
+
+#ajk-modal .modal-header h3 {
+  margin: 0 0 5px;
+
+  font-size: 20px;
+  color: #172033;
+}
+
+#ajk-modal .modal-header p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+#ajk-modal .modal-close {
+  width: 38px;
+  height: 38px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: #f1f5f9;
+
+  color: #475569;
+
+  font-size: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: .15s ease;
+}
+
+#ajk-modal .modal-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+
+/* ============================================================
+   MODAL FORM
+============================================================ */
+
+#ajk-modal .ajk-modal-form {
+  padding: 20px;
+}
+
+#ajk-modal .ajk-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+#ajk-modal .ajk-form-group {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+#ajk-modal .ajk-form-group.full {
+  grid-column: 1 / -1;
+}
+
+#ajk-modal .ajk-form-group label {
+  font-weight: 800;
+
+  color: #263246;
+
+  font-size: 14px;
+}
+
+#ajk-modal .ajk-form-group label span {
+  color: #dc2626;
+}
+
+#ajk-modal .ajk-form-group input,
+#ajk-modal .ajk-form-group select,
+#ajk-modal .ajk-form-group textarea {
+
+  width: 100%;
+
+  padding: 11px 12px;
+
+  border: 1px solid #d7dee9;
+
+  border-radius: 9px;
+
+  background: #fff;
+
+  color: #172033;
+
+  outline: none;
+
+  transition:
+    border-color .15s ease,
+    box-shadow .15s ease;
+}
+
+#ajk-modal .ajk-form-group input:focus,
+#ajk-modal .ajk-form-group select:focus,
+#ajk-modal .ajk-form-group textarea:focus {
+
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, .10);
+}
+
+
+/* ============================================================
+   MEMBER SELECT
+============================================================ */
+
+#ajk-member-id option {
+  padding: 8px;
+}
+
+
+/* ============================================================
+   MODAL FOOTER
+============================================================ */
+
+#ajk-modal .modal-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding: 16px 20px;
+
+  border-top: 1px solid #e8edf4;
+}
+
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+.ajk-saving {
+  pointer-events: none;
+  opacity: .65;
+}
+
+.ajk-loading {
+  color: #64748b;
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 800px) {
+
+  #ajk-modal .ajk-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #ajk-modal .ajk-form-group.full {
+    grid-column: auto;
+  }
+
+  /* 
+     Pada skrin kecil, kita kekalkan fungsi scroll.
+     Jika anda mahu buang lajur No. Rumah (seperti asal), 
+     sila buka comment (padam tanda /* dan * /) di bawah:
+  */
+  
+  /*
+  #ajkTable th:nth-child(4),
+  #ajkTable td:nth-child(4) {
+    display: none;
+  }
+  */
+
+}
+
+
+@media (max-width: 600px) {
+
+  #ajk-modal {
+    padding: 10px;
+  }
+
+  #ajk-modal .modal-dialog {
+    width: 100%;
+    max-height: 95vh;
+
+    border-radius: 14px;
+  }
+
+  #ajk-modal .modal-header {
+    padding: 16px;
+  }
+
+  #ajk-modal .ajk-modal-form {
+    padding: 16px;
+  }
+
+  #ajk-modal .modal-footer {
+    padding: 14px 16px;
+  }
+
+  .ajk-actions {
+    gap: 4px;
+  }
+
+  .ajk-action-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+}

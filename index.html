@@ -1,0 +1,4925 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0b5ed7"
+    >
+
+    <meta
+        name="description"
+        content="DM3 Management System - Persatuan Penduduk Desa Mentari 3"
+    >
+
+    <title>DM3 Management System V4.7</title>
+
+
+    <!-- =========================================================
+         FONT AWESOME
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- =========================================================
+         MAIN CSS
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/ahli.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/program.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/rfid.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/laporan.css"
+    >
+
+
+    <!-- =========================================================
+         DM3 INDEX V4.7 CLEAN OVERRIDE
+    ========================================================== -->
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            font-family:
+                Inter,
+                Arial,
+                sans-serif;
+            background: #f4f7fb;
+            color: #182235;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+
+        /* =====================================================
+           LOGIN
+        ===================================================== */
+
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 50000;
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #071a36 0%,
+                    #0b3b78 50%,
+                    #155dcc 100%
+                );
+
+            overflow-y: auto;
+        }
+
+        #loginScreen.hidden {
+            display: none !important;
+        }
+
+        .login-screen::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(59,130,246,.25),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 80% 80%,
+                    rgba(14,165,233,.20),
+                    transparent 35%
+                );
+
+            pointer-events: none;
+        }
+
+        .login-card {
+            position: relative;
+            z-index: 2;
+
+            width: min(440px, 100%);
+
+            background: rgba(255,255,255,.98);
+
+            border-radius: 22px;
+
+            padding: 34px;
+
+            box-shadow:
+                0 30px 90px
+                rgba(0,0,0,.35);
+        }
+
+        .login-logo {
+            width: 95px;
+            height: 95px;
+
+            margin:
+                0 auto 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-logo img {
+            max-width: 100%;
+            max-height: 100%;
+
+            object-fit: contain;
+        }
+
+        .login-card h1 {
+            margin: 0;
+
+            text-align: center;
+
+            font-size: 23px;
+            line-height: 1.25;
+        }
+
+        .login-card .sub {
+            margin:
+                7px 0 26px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .login-form-group {
+            margin-bottom: 17px;
+        }
+
+        .login-form-group label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .login-input-wrap {
+            position: relative;
+        }
+
+        .login-input-wrap input {
+            width: 100%;
+
+            padding:
+                13px
+                46px
+                13px
+                14px;
+
+            border:
+                1px solid
+                #d6deea;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #fff;
+
+            transition:
+                border-color .2s,
+                box-shadow .2s;
+        }
+
+        .login-input-wrap input:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37,99,235,.12);
+        }
+
+        .password-toggle {
+            position: absolute;
+
+            right: 5px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 40px;
+            height: 40px;
+
+            border: 0;
+
+            background: transparent;
+
+            color: #64748b;
+        }
+
+        .login-options {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin:
+                12px 0 18px;
+
+            font-size: 14px;
+        }
+
+        .login-options label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .login-options a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .login-options a:hover {
+            text-decoration: underline;
+        }
+
+        .login-button {
+            width: 100%;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            padding: 13px;
+
+            background: #2563eb;
+
+            color: #fff;
+
+            font-weight: 800;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 9px;
+
+            transition:
+                transform .15s,
+                background .2s;
+        }
+
+        .login-button:hover {
+            background: #1d4ed8;
+        }
+
+        .login-button:active {
+            transform: scale(.99);
+        }
+
+        .login-message {
+            min-height: 22px;
+
+            margin-top: 12px;
+
+            text-align: center;
+
+            font-size: 14px;
+        }
+
+        .login-footer {
+            margin-top: 23px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .login-footer small {
+            display: block;
+            margin-top: 4px;
+        }
+
+
+        /* =====================================================
+           APPLICATION
+        ===================================================== */
+
+        #app {
+            min-height: 100vh;
+
+            display: flex;
+
+            position: relative;
+        }
+
+        #app.hidden {
+            display: none !important;
+        }
+
+
+        /* =====================================================
+           MOBILE SIDEBAR OVERLAY
+        ===================================================== */
+
+        #sidebarOverlay {
+            position: fixed;
+            inset: 0;
+
+            background:
+                rgba(15,23,42,.55);
+
+            z-index: 999;
+
+            display: none;
+        }
+
+        #sidebarOverlay.active {
+            display: block;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        #sidebar {
+            position: fixed;
+
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            width: 255px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #071a36 0%,
+                    #09264d 100%
+                );
+
+            color: #fff;
+
+            z-index: 1000;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            box-shadow:
+                4px 0 25px
+                rgba(0,0,0,.12);
+        }
+
+        .sidebar-header {
+            min-height: 78px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding:
+                15px 17px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+        }
+
+        .sidebar-logo {
+            width: 45px;
+            height: 45px;
+
+            object-fit: contain;
+
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            min-width: 0;
+        }
+
+        .brand-text strong {
+            display: block;
+
+            font-size: 18px;
+
+            line-height: 1.1;
+        }
+
+        .brand-text span {
+            display: block;
+
+            margin-top: 3px;
+
+            font-size: 9px;
+
+            letter-spacing: .7px;
+
+            opacity: .68;
+        }
+
+        .mobile-sidebar-close {
+            display: none;
+
+            margin-left: auto;
+
+            border: 0;
+
+            background: transparent;
+
+            color: #fff;
+
+            font-size: 22px;
+        }
+
+
+        /* =====================================================
+           SIDEBAR USER
+        ===================================================== */
+
+        .sidebar-user {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 16px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            background:
+                #2563eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            min-width: 0;
+        }
+
+        .user-info strong {
+            display: block;
+
+            font-size: 13px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+        .user-info small {
+            display: block;
+
+            margin-top: 3px;
+
+            font-size: 11px;
+
+            opacity: .65;
+        }
+
+
+        /* =====================================================
+           SIDEBAR MENU
+        ===================================================== */
+
+        .sidebar-menu {
+            padding: 12px;
+        }
+
+        .sidebar-menu button {
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            border: 0;
+
+            background: transparent;
+
+            color: #d1d5db;
+
+            padding: 11px 12px;
+
+            margin-bottom: 4px;
+
+            border-radius: 9px;
+
+            text-align: left;
+
+            font-size: 13px;
+
+            transition:
+                background .15s,
+                color .15s;
+        }
+
+        .sidebar-menu button i {
+            width: 20px;
+
+            text-align: center;
+
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu button:hover,
+        .sidebar-menu button.active {
+            background:
+                #1261d6;
+
+            color: #fff;
+        }
+
+
+        /* =====================================================
+           SIDEBAR FOOTER
+        ===================================================== */
+
+        .sidebar-footer {
+            padding: 12px;
+
+            margin-top: 8px;
+        }
+
+        .logout-button {
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 9px;
+
+            padding: 11px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.15);
+
+            border-radius: 9px;
+
+            background:
+                rgba(255,255,255,.04);
+
+            color: #fff;
+        }
+
+        .logout-button:hover {
+            background:
+                rgba(220,38,38,.20);
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ===================================================== */
+
+        #mainContent {
+            margin-left: 255px;
+
+            min-width: 0;
+
+            flex: 1;
+        }
+
+
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
+
+        .topbar {
+            height: 72px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 500;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding:
+                0 22px;
+
+            background: #fff;
+
+            border-bottom:
+                1px solid
+                #e5eaf1;
+        }
+
+        .open-sidebar {
+            display: none;
+
+            border: 0;
+
+            background: transparent;
+
+            font-size: 22px;
+        }
+
+        .topbar-title {
+            flex: 1;
+
+            min-width: 0;
+        }
+
+        .topbar-title h1 {
+            margin: 0;
+
+            font-size: 20px;
+        }
+
+        .topbar-title p {
+            margin:
+                3px 0 0;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .topbar-actions {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding:
+                7px 10px;
+
+            border-radius: 999px;
+
+            background: #ecfdf5;
+
+            color: #047857;
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+        .status-pill i {
+            font-size: 7px;
+        }
+
+        .sync-button,
+        .icon-button {
+            border:
+                1px solid
+                #dce2eb;
+
+            background: #fff;
+
+            color: #334155;
+
+            border-radius: 9px;
+
+            padding:
+                9px 11px;
+        }
+
+        .sync-button:hover,
+        .icon-button:hover {
+            background: #f8fafc;
+        }
+
+        #notificationButton {
+            position: relative;
+        }
+
+        #notificationBadge {
+            position: absolute;
+
+            top: -4px;
+            right: -4px;
+
+            min-width: 17px;
+            height: 17px;
+
+            border-radius: 999px;
+
+            background: #dc2626;
+
+            color: #fff;
+
+            font-size: 9px;
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+        }
+
+        #notificationBadge:not(:empty) {
+            display: flex;
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page-content {
+            padding: 24px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .page-heading {
+            display: flex;
+
+            align-items: flex-start;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+        .page-heading h2 {
+            margin: 0;
+
+            font-size: 24px;
+        }
+
+        .page-heading p {
+            margin:
+                5px 0 0;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .primary-button,
+        .secondary-button,
+        .danger-button {
+            border: 0;
+
+            border-radius: 9px;
+
+            padding:
+                10px 15px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .primary-button {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .primary-button:hover {
+            background: #1d4ed8;
+        }
+
+        .secondary-button {
+            background: #e9eef5;
+            color: #25324a;
+        }
+
+        .secondary-button:hover {
+            background: #dfe6ef;
+        }
+
+        .danger-button {
+            background: #dc3545;
+            color: #fff;
+        }
+
+
+        /* =====================================================
+           CARDS
+        ===================================================== */
+
+        .data-card {
+            background: #fff;
+
+            border:
+                1px solid
+                #e5eaf1;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+            margin-bottom: 18px;
+
+            box-shadow:
+                0 4px 18px
+                rgba(15,23,42,.035);
+        }
+
+        .card-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin-bottom: 14px;
+        }
+
+        .card-header h3 {
+            margin: 0;
+        }
+
+        .card-header p {
+            margin:
+                4px 0 0;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           DASHBOARD
+        ===================================================== */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    4,
+                    minmax(0,1fr)
+                );
+
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: #fff;
+
+            border:
+                1px solid
+                #e5eaf1;
+
+            border-radius: 14px;
+
+            padding: 18px;
+        }
+
+        .stat-label {
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .stat-value {
+            margin-top: 6px;
+
+            font-size: 30px;
+
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           TOOLBAR
+        ===================================================== */
+
+        .toolbar {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+        }
+
+        .search-box {
+            width: min(390px,100%);
+
+            padding:
+                10px 12px;
+
+            border:
+                1px solid
+                #d7dee9;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            background: #fff;
+        }
+
+        .search-box:focus {
+            border-color: #2563eb;
+        }
+
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-container {
+            width: 100%;
+
+            overflow-x: auto;
+
+            overflow-y: visible;
+        }
+
+        .data-table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            background: #fff;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+
+            border-bottom:
+                1px solid
+                #edf0f5;
+
+            text-align: left;
+
+            vertical-align: middle;
+
+            white-space: nowrap;
+        }
+
+        .data-table th {
+            background:
+                #f8fafc;
+
+            color: #334155;
+
+            font-size: 12px;
+
+            font-weight: 800;
+        }
+
+        .data-table td {
+            font-size: 13px;
+        }
+
+        .empty-table {
+            text-align: center !important;
+
+            padding: 30px !important;
+
+            color: #7a8495;
+        }
+
+        .actions {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+        }
+
+        .btn {
+            border: 0;
+
+            border-radius: 7px;
+
+            padding:
+                7px 10px;
+
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: #fff;
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-card {
+            background: #fff;
+
+            border:
+                1px solid
+                #e5eaf1;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+            margin-bottom: 18px;
+        }
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0,1fr)
+                );
+
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column:
+                1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 700;
+
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+
+            padding:
+                11px 12px;
+
+            border:
+                1px solid
+                #d7dee9;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37,99,235,.08);
+        }
+
+        .form-actions {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 9px;
+
+            margin-top: 18px;
+        }
+
+
+                /* =====================================================
+           AJK V4.7 — EXACT 7 COLUMNS (DIBETULKAN)
+        ===================================================== */
+
+        #ajkTable {
+            width: 100%;
+            /* Lebar minimum yang munasabah supaya tak terlalu lebar */
+            min-width: 1150px; 
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+
+        #ajkTable th,
+        #ajkTable td {
+            vertical-align: middle;
+        }
+
+        /* Bil. */
+        #ajkTable th:nth-child(1),
+        #ajkTable td:nth-child(1) {
+            width: 60px;
+            text-align: center;
+        }
+
+        /* Nama — ADA HAD LEBAR, TAK BOLEH MENGEMBANG */
+        #ajkTable th:nth-child(2),
+        #ajkTable td:nth-child(2) {
+            width: 300px; 
+        }
+
+        /* UID RFID */
+        #ajkTable th:nth-child(3),
+        #ajkTable td:nth-child(3) {
+            width: 180px;
+            white-space: nowrap;
+        }
+
+        /* No Rumah */
+        #ajkTable th:nth-child(4),
+        #ajkTable td:nth-child(4) {
+            width: 130px;
+        }
+
+        /* Jawatan */
+        #ajkTable th:nth-child(5),
+        #ajkTable td:nth-child(5) {
+            width: 200px;
+        }
+
+        /* Status */
+        #ajkTable th:nth-child(6),
+        #ajkTable td:nth-child(6) {
+            width: 110px;
+            text-align: center;
+        }
+
+        /* Tindakan */
+        #ajkTable th:nth-child(7),
+        #ajkTable td:nth-child(7) {
+            width: 130px;
+            text-align: center;
+        }
+
+                /* Susunan Gambar di atas Nama */
+        #ajkTable .ajk-person-cell {
+            display: flex;
+            flex-direction: column; /* Tukar ke column (atas-bawah) */
+            align-items: center;    /* Letak gambar & nama di tengah */
+            justify-content: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        /* Betulkan Nama supaya tak pecah menegak */
+        #ajkTable .ajk-name {
+            font-weight: 700;
+            text-align: center;
+            /* Benarkan wrap pada perkataan penuh, bukan huruf */
+            white-space: normal; 
+            word-break: normal; 
+            overflow-wrap: break-word; 
+        }
+
+        #ajkTable .ajk-table-photo,
+        #ajkTable .ajk-table-photo-placeholder {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef2f7;
+            overflow: hidden;
+        }
+
+        #ajkTable .ajk-table-photo-placeholder i {
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        #ajkTable .ajk-position {
+            font-weight: 700;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #ajkTable .ajk-rfid {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .3px;
+            white-space: nowrap;
+        }
+
+        #ajkTable .ajk-empty-value {
+            color: #9aa3b2;
+        }
+
+        #ajkTable .ajk-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        #ajkTable .ajk-status.active {
+            background: #dff5e8;
+            color: #087443;
+        }
+
+        #ajkTable .ajk-status.inactive {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        #ajkTable .ajk-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        #ajkTable .ajk-action-btn {
+            border: 0;
+            border-radius: 7px;
+            padding: 7px 9px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #ajkTable .ajk-edit-btn {
+            background: #2563eb;
+        }
+
+        #ajkTable .ajk-delete-btn {
+            background: #dc3545;
+        }
+
+
+        /* =====================================================
+           MODAL
+           
+           PENTING:
+           Modal AJK dicipta oleh ajk.js.
+           Modal mesti berada DI ATAS loading overlay.
+        ===================================================== */
+
+        .modal {
+            position: fixed !important;
+
+            inset: 0 !important;
+
+            z-index: 100000 !important;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 18px;
+        }
+
+        .modal.hidden {
+            display: none !important;
+
+            visibility: hidden !important;
+
+            opacity: 0 !important;
+
+            pointer-events: none !important;
+        }
+
+        .modal-overlay {
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                rgba(15,23,42,.62);
+
+            z-index: 0;
+        }
+
+        .modal-dialog {
+            position: relative;
+
+            z-index: 1;
+
+            width:
+                min(
+                    760px,
+                    100%
+                );
+
+            max-height: 92vh;
+
+            overflow-y: auto;
+
+            background: #fff;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 30px 90px
+                rgba(0,0,0,.32);
+        }
+
+        .modal-header {
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 20px;
+
+            border-bottom:
+                1px solid
+                #e8edf4;
+        }
+
+        .modal-header h3 {
+            margin:
+                0 0 4px;
+        }
+
+        .modal-header p {
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .modal-close {
+            border: 0;
+
+            background: transparent;
+
+            color: #64748b;
+
+            font-size: 28px;
+
+            line-height: 1;
+
+            padding: 2px 7px;
+        }
+
+        .modal-close:hover {
+            color: #111827;
+        }
+
+        .modal-dialog form {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            padding:
+                16px 20px;
+
+            border-top:
+                1px solid
+                #e8edf4;
+        }
+
+
+        /* =====================================================
+           GLOBAL LOADING OVERLAY
+           
+           MODAL AJK = 100000
+           LOADING      = 90000
+           
+           Jadi modal sentiasa di atas loading.
+        ===================================================== */
+
+        #loadingOverlay {
+            position: fixed !important;
+
+            inset: 0 !important;
+
+            z-index: 90000 !important;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .82
+                );
+        }
+
+        #loadingOverlay.hidden {
+            display: none !important;
+
+            visibility: hidden !important;
+
+            opacity: 0 !important;
+
+            pointer-events: none !important;
+        }
+
+        .loading-box {
+            background: #fff;
+
+            border-radius: 14px;
+
+            padding:
+                24px 30px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.18);
+
+            text-align: center;
+        }
+
+        .spinner {
+            width: 38px;
+            height: 38px;
+
+            margin:
+                0 auto 12px;
+
+            border:
+                4px solid
+                #dbeafe;
+
+            border-top-color:
+                #2563eb;
+
+            border-radius: 50%;
+
+            animation:
+                dm3Spin
+                1s linear infinite;
+        }
+
+        @keyframes dm3Spin {
+            to {
+                transform:
+                    rotate(360deg);
+            }
+        }
+
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        #toastContainer {
+            position: fixed;
+
+            right: 18px;
+
+            bottom: 18px;
+
+            z-index: 110000;
+
+            max-width:
+                min(
+                    420px,
+                    calc(100vw - 36px)
+                );
+        }
+
+        .toast {
+            background: #111827;
+
+            color: #fff;
+
+            padding:
+                12px 15px;
+
+            border-radius: 9px;
+
+            margin-top: 8px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,.20);
+        }
+
+
+        /* =====================================================
+           RFID
+        ===================================================== */
+
+        .rfid-status {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                8px 12px;
+
+            border-radius: 999px;
+
+            background: #fef2f2;
+
+            color: #b91c1c;
+
+            font-size: 12px;
+
+            font-weight: 800;
+        }
+
+        .rfid-status.connected {
+            background: #ecfdf5;
+
+            color: #047857;
+        }
+
+        .rfid-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+        }
+
+        .rfid-panel {
+            background: #fff;
+
+            border:
+                1px solid
+                #e5eaf1;
+
+            border-radius: 14px;
+
+            padding: 20px;
+        }
+
+        .rfid-reader-box {
+            padding: 30px;
+
+            text-align: center;
+
+            border:
+                2px dashed
+                #cbd5e1;
+
+            border-radius: 14px;
+        }
+
+        .rfid-reader-box i {
+            font-size: 42px;
+
+            margin-bottom: 10px;
+        }
+
+        .scan-result {
+            margin-top: 16px;
+
+            padding: 16px;
+
+            border-radius: 12px;
+
+            background: #eff6ff;
+        }
+
+        .chart-placeholder {
+            min-height: 240px;
+
+            border:
+                1px dashed
+                #cbd5e1;
+
+            border-radius: 12px;
+
+            padding: 20px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .content-grid {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0,1fr)
+                    );
+            }
+
+            #ajkTable {
+                min-width: 1050px;
+            }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            #sidebar {
+                transform:
+                    translateX(-100%);
+
+                transition:
+                    transform .2s ease;
+            }
+
+            #sidebar.active,
+            #sidebar.open {
+                transform:
+                    translateX(0);
+            }
+
+            .mobile-sidebar-close {
+                display: block;
+            }
+
+            #mainContent {
+                margin-left: 0;
+            }
+
+            .open-sidebar {
+                display: block;
+            }
+
+            .rfid-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .page-content {
+                padding: 14px;
+            }
+
+            .content-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-heading {
+                flex-direction: column;
+            }
+
+            .topbar {
+                padding:
+                    0 14px;
+            }
+
+            .topbar-actions .status-pill {
+                display: none;
+            }
+
+            .login-card {
+                padding: 25px;
+            }
+
+            .toolbar {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ============================================================
+     LOGIN SCREEN
+============================================================= -->
+
+<div
+    id="loginScreen"
+    class="login-screen"
+>
+
+    <div class="login-card">
+
+        <div class="login-logo">
+
+            <img
+                src="assets/images/logo.png"
+                alt="DM3 Logo"
+                onerror="this.style.display='none';"
+            >
+
+        </div>
+
+
+        <h1>
+            PERSATUAN PENDUDUK DESA MENTARI 3
+        </h1>
+
+
+        <div class="sub">
+            DM3 MANAGEMENT SYSTEM
+        </div>
+
+
+        <form
+            id="loginForm"
+            autocomplete="off"
+        >
+
+            <div class="login-form-group">
+
+                <label for="username">
+                    <i class="fa-solid fa-user"></i>
+                    Username
+                </label>
+
+                <div class="login-input-wrap">
+
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        autocomplete="username"
+                        placeholder="Masukkan username"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="login-form-group">
+
+                <label for="password">
+                    <i class="fa-solid fa-lock"></i>
+                    Password
+                </label>
+
+                <div class="login-input-wrap">
+
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        placeholder="Masukkan password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="password-toggle"
+                        aria-label="Tunjuk password"
+                    >
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="login-options">
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        id="rememberMe"
+                        name="rememberMe"
+                    >
+
+                    Ingat saya
+
+                </label>
+
+
+                <a
+                    href="#"
+                    id="forgotPassword"
+                >
+                    Lupa password?
+                </a>
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="loginButton"
+                class="login-button"
+            >
+
+                <i
+                    class="fa-solid fa-right-to-bracket"
+                ></i>
+
+                <span>
+                    LOG MASUK
+                </span>
+
+            </button>
+
+
+            <div
+                id="loginMessage"
+                class="login-message"
+            ></div>
+
+        </form>
+
+
+        <div class="login-footer">
+
+            <div>
+                Persatuan Penduduk Desa Mentari 3
+            </div>
+
+            <small>
+                DM3 Management System V4.7
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     MAIN APPLICATION
+============================================================= -->
+
+<div
+    id="app"
+    class="app-container hidden"
+>
+
+
+    <!-- MOBILE OVERLAY -->
+
+    <div
+        id="sidebarOverlay"
+        class="sidebar-overlay"
+    ></div>
+
+
+    <!-- ========================================================
+         SIDEBAR — SATU SAHAJA
+    ========================================================= -->
+
+    <aside
+        id="sidebar"
+        class="sidebar"
+    >
+
+        <div class="sidebar-header">
+
+            <img
+                class="sidebar-logo"
+                src="assets/images/logo.png"
+                alt="DM3"
+                onerror="this.style.display='none';"
+            >
+
+
+            <div class="brand-text">
+
+                <strong>
+                    DM3
+                </strong>
+
+                <span>
+                    MANAGEMENT SYSTEM
+                </span>
+
+            </div>
+
+
+            <button
+                id="closeSidebar"
+                class="mobile-sidebar-close"
+                type="button"
+            >
+
+                <i
+                    class="fa-solid fa-xmark"
+                ></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- USER -->
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+
+                <i
+                    class="fa-solid fa-user-shield"
+                ></i>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <strong
+                    id="loggedUserName"
+                >
+                    Administrator
+                </strong>
+
+                <small
+                    id="loggedUserRole"
+                >
+                    Admin
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             NAVIGATION
+        ====================================================== -->
+
+        <nav class="sidebar-menu">
+
+
+            <button
+                type="button"
+                data-module="dashboard"
+                class="active"
+            >
+
+                <i
+                    class="fa-solid fa-chart-pie"
+                ></i>
+
+                Dashboard
+
+            </button>
+
+
+            <button
+                type="button"
+                data-module="members"
+            >
+
+                <i
+                    class="fa-solid fa-users"
+                ></i>
+
+                Ahli Persatuan
+
+            </button>
+
+
+            <button
+                type="button"
+                data-module="ajk"
+            >
+
+                <i
+                    class="fa-solid fa-user-tie"
+                ></i>
+
+                AJK Persatuan
+
+            </button>
+
+
+            <button
+                type="button"
+                data-module="portfolio"
+            >
+
+                <i
+                    class="fa-solid fa-briefcase"
+                ></i>
+
+                Portfolio AJK
+
+            </button>
+
+
+            <button
+                type="button"
+                data-module="programs"
+            >
+
+                <i
+                    class="fa-solid fa-calendar-check"
+                ></i>
+
+                Program
+
+            </button>
+
+
+            <button
+                type="button"
+                data-module="rfid"
+            >
+
+                <i
+                    class="fa-solid fa-id-card"
+                ></i>
+
+                Kehadiran RFID
+
+            </button>
+
+
+            <button
+                type="button"
+                data-module="statistics"
+            >
+
+                <i
+                    class="fa-solid fa-chart-column"
+                ></i>
+
+                Statistik
+
+            </button>
+
+
+            <button
+                type="button"
+                data-module="association"
+            >
+
+                <i
+                    class="fa-solid fa-circle-info"
+                ></i>
+
+                Maklumat Persatuan
+
+            </button>
+
+
+            <button
+                type="button"
+                data-module="settings"
+            >
+
+                <i
+                    class="fa-solid fa-gear"
+                ></i>
+
+                Tetapan
+
+            </button>
+
+        </nav>
+
+
+        <!-- FOOTER -->
+
+        <div class="sidebar-footer">
+
+            <button
+                id="logoutButton"
+                type="button"
+                class="logout-button"
+            >
+
+                <i
+                    class="fa-solid fa-right-from-bracket"
+                ></i>
+
+                Log Keluar
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ========================================================
+         MAIN CONTENT
+    ========================================================= -->
+
+    <main
+        id="mainContent"
+        class="main-content"
+    >
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <button
+                id="openSidebar"
+                class="open-sidebar"
+                type="button"
+            >
+
+                <i
+                    class="fa-solid fa-bars"
+                ></i>
+
+            </button>
+
+
+            <div class="topbar-title">
+
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
+
+                <p id="pageSubtitle">
+                    Ringkasan sistem DM3
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <span
+                    id="networkStatus"
+                    class="status-pill"
+                >
+
+                    <i
+                        class="fa-solid fa-circle"
+                    ></i>
+
+                    <span id="networkStatusText">
+                        ONLINE
+                    </span>
+
+                </span>
+
+
+                <button
+                    id="syncButton"
+                    class="sync-button"
+                    type="button"
+                    title="Sync data"
+                >
+
+                    <i
+                        class="fa-solid fa-rotate"
+                    ></i>
+
+                    Sync
+
+                </button>
+
+
+                <button
+                    id="notificationButton"
+                    class="icon-button"
+                    type="button"
+                    title="Notifikasi"
+                >
+
+                    <i
+                        class="fa-regular fa-bell"
+                    ></i>
+
+                    <span
+                        id="notificationBadge"
+                    ></span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ====================================================
+             PAGE CONTENT
+        ===================================================== -->
+
+        <div
+            id="pageContent"
+            class="page-content"
+        >
+<!-- ============================================================
+     DASHBOARD
+============================================================= -->
+
+<section
+    id="page-dashboard"
+    class="page-section active"
+    data-module-page="dashboard"
+>
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                Dashboard
+            </h2>
+
+            <p>
+                Ringkasan terkini
+                Persatuan Penduduk Desa Mentari 3.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="content-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Jumlah Ahli
+            </div>
+
+            <div
+                id="total-members"
+                class="stat-value"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Jumlah AJK
+            </div>
+
+            <div
+                id="total-ajk"
+                class="stat-value"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Jumlah Program
+            </div>
+
+            <div
+                id="total-programs"
+                class="stat-value"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Jumlah Kehadiran
+            </div>
+
+            <div
+                id="total-attendance"
+                class="stat-value"
+            >
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RINGKASAN -->
+
+    <div class="data-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>
+                    Ringkasan
+                </h3>
+
+                <p>
+                    Maklumat sistem DM3.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="content-grid">
+
+
+            <div>
+
+                <strong>
+                    Ahli Aktif
+                </strong>
+
+                <div id="active-members">
+                    0
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    AJK Aktif
+                </strong>
+
+                <div id="active-ajk">
+                    0
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Yuran Tahunan
+                </strong>
+
+                <div id="annual-fee">
+                    RM 15.00
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Program Terkini
+                </strong>
+
+                <div id="recentPrograms">
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- KEHADIRAN TERKINI -->
+
+    <div class="data-card">
+
+        <h3>
+            Kehadiran Terkini
+        </h3>
+
+        <div
+            id="recentAttendance"
+            class="empty-table"
+        >
+            Tiada rekod.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     AHLI
+============================================================= -->
+
+<section
+    id="page-ahli"
+    class="page-section"
+    data-module-page="members"
+>
+
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                Ahli Persatuan
+            </h2>
+
+            <p>
+                Senarai ahli
+                Persatuan Penduduk Desa Mentari 3.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="add-member-btn"
+            class="primary-button"
+        >
+
+            <i
+                class="fa-solid fa-plus"
+            ></i>
+
+            Tambah Ahli
+
+        </button>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="data-card">
+
+        <div class="toolbar">
+
+            <input
+                id="member-search"
+                class="search-box"
+                type="search"
+                placeholder="Cari nama, no. rumah, RFID..."
+            >
+
+
+            <button
+                type="button"
+                id="dm3AhliRefreshButton"
+                class="secondary-button"
+            >
+
+                <i
+                    class="fa-solid fa-arrows-rotate"
+                ></i>
+
+                Refresh
+
+            </button>
+
+        </div>
+
+
+        <!-- MEMBER TABLE -->
+
+<div class="table-container">
+
+    <table
+        id="membersTable"
+        class="data-table"
+    >
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Bil.
+                </th>
+
+                <th>
+                    Nama
+                </th>
+
+                <th>
+                    No. K/P
+                </th>
+
+                <th>
+                    UID RFID
+                </th>
+
+                <th>
+                    No. Rumah
+                </th>
+
+                <th>
+                    Telefon
+                </th>
+
+                <th>
+                    Jawatan
+                </th>
+
+                <th>
+                    Status
+                </th>
+
+                <th>
+                    Tindakan
+                </th>
+
+            </tr>
+
+        </thead>
+
+                <tbody
+                    id="membersTableBody"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="9"
+                            class="empty-table"
+                        >
+                            Memuatkan data ahli...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!--
+        PENTING:
+        Jangan letakkan modal Ahli di sini.
+        ahli.js V4.7 mencipta modal sendiri.
+    -->
+
+</section>
+
+
+<!-- ============================================================
+     AJK
+     SATU PAGE SAHAJA
+============================================================= -->
+
+<section
+    id="page-ajk"
+    class="page-section"
+    data-module-page="ajk"
+>
+
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                AJK Persatuan
+            </h2>
+
+            <p>
+                Senarai AJK dipilih terus
+                daripada Ahli Persatuan.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="add-ajk-btn"
+            class="primary-button"
+        >
+
+            <i
+                class="fa-solid fa-plus"
+            ></i>
+
+            Tambah AJK
+
+        </button>
+
+    </div>
+
+
+    <div class="data-card">
+
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>
+                    Senarai AJK
+                </h3>
+
+                <p>
+                    Susunan jawatan mengikut hierarki.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="ajk-refresh-btn"
+                class="secondary-button"
+            >
+
+                <i
+                    class="fa-solid fa-arrows-rotate"
+                ></i>
+
+                Refresh
+
+            </button>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table
+                id="ajkTable"
+                class="data-table"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Bil.
+                        </th>
+
+                        <th>
+                            Nama
+                        </th>
+
+                        <th>
+                            UID RFID
+                        </th>
+
+                        <th>
+                            No. Rumah
+                        </th>
+
+                        <th>
+                            Jawatan
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Tindakan
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="ajkTableBody"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty-table"
+                        >
+                            Memuatkan data AJK...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!--
+        =========================================================
+        PENTING
+        =========================================================
+
+        JANGAN LETAK #ajk-modal DI SINI.
+
+        ajk.js V4.6 akan mencipta modal:
+        #ajk-modal
+
+        secara automatik.
+
+        Ini mengelakkan duplicate modal.
+    -->
+
+</section>
+
+
+<!-- ============================================================
+     PORTFOLIO AJK
+============================================================= -->
+
+<section
+    id="page-portfolio"
+    class="page-section"
+    data-module-page="portfolio"
+>
+
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                Portfolio AJK
+            </h2>
+
+            <p>
+                Senarai portfolio dan tugasan AJK.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="data-card">
+
+        <div class="table-container">
+
+            <table
+                id="portfolioTable"
+                class="data-table"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Bil.
+                        </th>
+
+                        <th>
+                            Nama
+                        </th>
+
+                        <th>
+                            Jawatan
+                        </th>
+
+                        <th>
+                            Portfolio
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="portfolioTableBody"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            class="empty-table"
+                        >
+                            Tiada data portfolio.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     PROGRAM
+============================================================= -->
+
+<section
+    id="page-program"
+    class="page-section"
+    data-module-page="programs"
+>
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                Program
+            </h2>
+
+            <p>
+                Pengurusan program
+                dan aktiviti DM3.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="add-program-btn"
+            class="primary-button"
+        >
+
+            <i
+                class="fa-solid fa-plus"
+            ></i>
+
+            Tambah Program
+
+        </button>
+
+    </div>
+
+
+    <div class="data-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>
+                    Senarai Program
+                </h3>
+
+                <p>
+                    Program dan aktiviti DM3.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="program-refresh-btn"
+                class="secondary-button"
+            >
+
+                <i
+                    class="fa-solid fa-arrows-rotate"
+                ></i>
+
+                Refresh
+
+            </button>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table
+                id="programsTable"
+                class="data-table"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Bil.
+                        </th>
+
+                        <th>
+                            Nama Program
+                        </th>
+
+                        <th>
+                            Tarikh
+                        </th>
+
+                        <th>
+                            Masa
+                        </th>
+
+                        <th>
+                            Tempat
+                        </th>
+
+                        <th>
+                            Kategori
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Tindakan
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="program-table-body"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="empty-table"
+                        >
+                            Tiada program.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         PROGRAM MODAL
+    ========================================================= -->
+
+    <div
+        id="program-modal"
+        class="modal hidden"
+    >
+
+        <div
+            class="modal-overlay"
+            data-close-modal="program-modal"
+        ></div>
+
+
+        <div
+            class="modal-dialog"
+            role="dialog"
+            aria-modal="true"
+        >
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h3>
+                        Tambah / Kemaskini Program
+                    </h3>
+
+                    <p>
+                        Maklumat program persatuan.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-modal="program-modal"
+                    aria-label="Tutup"
+                >
+                    &times;
+                </button>
+
+            </div>
+
+
+            <form
+    id="program-form"
+    autocomplete="off"
+    onsubmit="return false;"
+>
+
+                <input
+                    type="hidden"
+                    id="program-id"
+                    name="id"
+                >
+
+
+                <div class="form-grid">
+
+
+                    <div
+                        class="form-group full"
+                    >
+
+                        <label
+                            for="program-name"
+                        >
+                            Nama Program *
+                        </label>
+
+                        <input
+                            id="program-name"
+                            name="nama"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="program-date"
+                        >
+                            Tarikh
+                        </label>
+
+                        <input
+                            id="program-date"
+                            name="tarikh"
+                            type="date"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="program-time"
+                        >
+                            Masa
+                        </label>
+
+                        <input
+                            id="program-time"
+                            name="masa"
+                            type="time"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="program-place"
+                        >
+                            Tempat
+                        </label>
+
+                        <input
+                            id="program-place"
+                            name="tempat"
+                            value="Dewan DM3"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="program-category"
+                        >
+                            Kategori
+                        </label>
+
+                        <input
+                            id="program-category"
+                            name="kategori"
+                        >
+
+                    </div>
+
+
+                                        <div class="form-group">
+
+                        <label
+                            for="program-status"
+                        >
+                            Status
+                        </label>
+
+                        <select
+                            id="program-status"
+                            name="status"
+                        >
+
+                            <option>
+                                Akan Datang
+                            </option>
+
+                            <option>
+                                Berjalan
+                            </option>
+
+                            <option>
+                                Selesai
+                            </option>
+
+                            <option>
+                                Dibatalkan
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        class="form-group full"
+                    >
+
+                        <label
+                            for="program-description"
+                        >
+                            Penerangan
+                        </label>
+
+                        <textarea
+                            id="program-description"
+                            name="penerangan"
+                            rows="4"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        data-close-modal="program-modal"
+                    >
+                        Batal
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Simpan Program
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     RFID
+============================================================= -->
+
+<section
+    id="page-rfid"
+    class="page-section"
+    data-module-page="rfid"
+>
+
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                Kehadiran RFID
+            </h2>
+
+            <p>
+                Rekod kehadiran
+                menggunakan kad RFID.
+            </p>
+
+        </div>
+
+
+        <div
+            id="rfidStatusBadge"
+            class="rfid-status"
+        >
+
+            <i
+                class="fa-solid fa-circle"
+            ></i>
+
+            DISCONNECTED
+
+        </div>
+
+    </div>
+
+
+    <!-- RFID GRID -->
+
+    <div class="rfid-grid">
+
+
+        <!-- ====================================================
+             READER
+        ===================================================== -->
+
+        <div class="rfid-panel">
+
+            <h3>
+                RFID Reader
+            </h3>
+
+
+            <div class="rfid-reader-box">
+
+                <i
+                    class="fa-solid fa-id-card"
+                ></i>
+
+
+                <div
+                    id="rfidReaderMessage"
+                >
+                    Reader belum disambungkan.
+                </div>
+
+
+                <div
+                    style="
+                        margin-top:14px;
+                        display:flex;
+                        gap:8px;
+                        justify-content:center;
+                        flex-wrap:wrap;
+                    "
+                >
+
+
+                    <button
+                        id="connectRfidButton"
+                        type="button"
+                        class="primary-button"
+                    >
+
+                        <i
+                            class="fa-solid fa-plug"
+                        ></i>
+
+                        Connect Serial Reader
+
+                    </button>
+
+
+                    <button
+                        id="liveScanButton"
+                        type="button"
+                        class="secondary-button"
+                    >
+
+                        <i
+                            class="fa-solid fa-wifi"
+                        ></i>
+
+                        Live Scan Screen
+
+                    </button>
+
+
+                    <button
+                        id="rfidTestButton"
+                        type="button"
+                        class="secondary-button"
+                    >
+
+                        <i
+                            class="fa-solid fa-vial"
+                        ></i>
+
+                        RFID Test Mode
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- HID SCANNER INPUT -->
+
+            <input
+    id="rfid-hidden-input"
+    type="text"
+    autocomplete="off"
+    tabindex="-1"
+    inputmode="none"
+    aria-hidden="false"
+    readonly
+    onfocus="this.removeAttribute('readonly');"
+    style="
+        position:absolute;
+        left:-9999px;
+        opacity:0;
+        width:1px;
+        height:1px;
+    "
+>
+
+
+            <!-- SCAN RESULT -->
+
+            <div
+                id="scanResult"
+                class="scan-result hidden"
+            >
+
+                <strong
+                    id="scanResultName"
+                >
+                    -
+                </strong>
+
+                <div
+                    id="scanResultDetails"
+                >
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             PROGRAM KEHADIRAN
+        ===================================================== -->
+
+        <div class="rfid-panel">
+
+            <h3>
+                Program Kehadiran
+            </h3>
+
+
+            <select
+                id="rfidProgramSelect"
+                class="search-box"
+                style="width:100%;"
+            >
+
+                <option value="">
+                    -- Pilih Program --
+                </option>
+
+            </select>
+
+
+            <div
+                id="attendanceTableContainer"
+                class="chart-placeholder"
+                style="margin-top:16px;"
+            >
+                Senarai kehadiran
+                akan dipaparkan di sini.
+            </div>
+
+
+            <button
+                id="manualAttendanceButton"
+                type="button"
+                class="primary-button"
+                style="margin-top:14px;"
+            >
+
+                <i
+                    class="fa-solid fa-plus"
+                ></i>
+
+                Kehadiran Manual
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+      <!-- ========================================================
+         LIVE SCAN SCREEN — FUTURISTIC FULLSCREEN
+    ========================================================= -->
+
+    <div id="liveScanScreen" class="live-scan-screen hidden">
+        <div class="live-scan-grid-bg"></div>
+
+        <!-- HEADER -->
+        <div class="live-scan-header">
+            <div class="live-scan-title">
+                <span class="live-scan-dot"></span>
+                <i class="fa-solid fa-satellite-dish"></i>
+                LIVE RFID SCAN
+            </div>
+
+            <select class="live-scan-program" id="liveScanProgramSelect">
+                <option value="">-- Pilih Program --</option>
+            </select>
+
+            <div class="live-scan-header-actions">
+                <button id="liveScanFullscreenBtn" type="button" class="live-scan-icon-btn" title="Fullscreen">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
+                <button id="closeLiveScanButton" type="button" class="live-scan-icon-btn live-scan-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="live-scan-body">
+
+            <!-- MAIN AREA -->
+            <div class="live-scan-main" id="liveScanMain">
+
+               <!-- IDLE STATE -->
+<div class="scan-idle" id="scanIdle">
+    <div class="scan-pulse-ring"></div>
+    <div class="scan-pulse-ring delay-1"></div>
+    <div class="scan-pulse-ring delay-2"></div>
+    <div class="scan-idle-icon">
+        <i class="fa-solid fa-id-card"></i>
+    </div>
+    <div class="scan-idle-text">SILA SCAN KAD RFID</div>
+    <div class="scan-idle-sub">Kad akan diimbas secara automatik</div>
+
+    <!-- ==========================================================
+         TAMBAHAN BAHARU: JAM BESAR DI TENGAH SKRIN
+         ========================================================== -->
+    <div class="scan-big-clock">
+        <div class="scan-big-clock-time" id="scanBigClockTime">--:--:--</div>
+        <div class="scan-big-clock-date" id="scanBigClockDate">--</div>
+    </div>
+    <!-- ========================================================== -->
+</div>
+
+                <!-- SUCCESS STATE -->
+                <div class="scan-result-card hidden" id="scanResultCard">
+                    <div class="scan-success-ring"></div>
+
+                    <div class="scan-photo-wrap">
+                        <img id="liveScanPhoto" class="scan-photo" alt="" style="display:none;">
+                        <div id="liveScanPhotoPlaceholder" class="scan-photo-placeholder">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <div class="scan-photo-check">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+
+                    <div class="scan-name" id="liveScanName">-</div>
+                    <div class="scan-position" id="liveScanPosition">-</div>
+
+                    <div class="scan-info-grid">
+                        <div class="scan-info-item">
+                            <i class="fa-solid fa-house"></i>
+                            <div>
+                                <span>No. Rumah</span>
+                                <strong id="liveScanHouse">-</strong>
+                            </div>
+                        </div>
+                        <div class="scan-info-item">
+                            <i class="fa-solid fa-clock"></i>
+                            <div>
+                                <span>Masa</span>
+                                <strong id="liveScanTime">-</strong>
+                            </div>
+                        </div>
+                        <div class="scan-info-item">
+                            <i class="fa-solid fa-id-card"></i>
+                            <div>
+                                <span>UID</span>
+                                <strong id="liveScanUid">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scan-status" id="liveScanStatus">
+                        <i class="fa-solid fa-circle-check"></i>
+                        HADIR DIREKODKAN
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SIDEBAR — SCAN TERKINI -->
+<div class="live-scan-sidebar">
+    <div class="scan-sidebar-title">
+        <i class="fa-solid fa-list-check"></i>
+        SCAN TERKINI
+    </div>
+
+    <div class="scan-recent-list" id="scanRecentList">
+        <div class="scan-empty">Tiada scan lagi.</div>
+    </div>
+
+    <div class="scan-stats">
+        <div class="scan-stat">
+            <span>JUMLAH HADIR</span>
+            <strong id="liveScanCount">0</strong>
+        </div>
+
+        <!-- ==========================================================
+             TAMBAHAN: BUTANG EXPORT
+             ========================================================== -->
+        <div class="scan-export-buttons">
+            <button
+                type="button"
+                class="scan-export-btn scan-export-csv"
+                id="exportCsvButton"
+                title="Download CSV (Excel)"
+            >
+                <i class="fa-solid fa-file-csv"></i>
+                CSV
+            </button>
+
+            <button
+                type="button"
+                class="scan-export-btn scan-export-whatsapp"
+                id="exportWhatsappButton"
+                title="Hantar ke WhatsApp"
+            >
+                <i class="fa-brands fa-whatsapp"></i>
+                WhatsApp
+            </button>
+
+            <button
+                type="button"
+                class="scan-export-btn scan-export-email"
+                id="exportEmailButton"
+                title="Hantar ke Email"
+            >
+                <i class="fa-solid fa-envelope"></i>
+                Email
+            </button>
+        </div>
+        <!-- ========================================================== -->
+    </div>
+</div>
+
+    <!-- ========================================================
+         RFID TEST MODAL
+    ========================================================= -->
+
+    <div
+        id="rfidTestPanel"
+        class="modal hidden"
+    >
+
+        <div
+            class="modal-overlay"
+            data-close-modal="rfidTestPanel"
+        ></div>
+
+
+        <div class="modal-dialog">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h3>
+                        RFID Test Mode
+                    </h3>
+
+                    <p>
+                        Uji carian UID RFID.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-modal="rfidTestPanel"
+                >
+                    &times;
+                </button>
+
+            </div>
+
+
+            <div
+                style="padding:20px;"
+            >
+
+                <input
+                    id="rfidTestUid"
+                    class="search-box"
+                    placeholder="Masukkan UID"
+                    style="width:100%;"
+                >
+
+
+                <button
+                    id="simulateRfidButton"
+                    type="button"
+                    class="primary-button"
+                    style="margin-top:12px;"
+                >
+
+                    <i
+                        class="fa-solid fa-vial"
+                    ></i>
+
+                    Simulasi Scan
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- ============================================================
+     STATISTIK
+============================================================= -->
+
+<section
+    id="page-statistik"
+    class="page-section"
+    data-module-page="statistics"
+>
+
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                Statistik
+            </h2>
+
+            <p>
+                Ringkasan statistik
+                DM3.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="content-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Ahli
+            </div>
+
+            <div
+                id="statistics-members"
+                class="stat-value"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                AJK
+            </div>
+
+            <div
+                id="statistics-ajk"
+                class="stat-value"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Program
+            </div>
+
+            <div
+                id="statistics-programs"
+                class="stat-value"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Kehadiran
+            </div>
+
+            <div
+                id="statistics-attendance"
+                class="stat-value"
+            >
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="data-card">
+
+        <h3>
+            Taburan Aras
+        </h3>
+
+        <div
+            id="blockDistribution"
+            class="chart-placeholder"
+        >
+        </div>
+
+    </div>
+
+
+    <div class="data-card">
+
+        <h3>
+            Kehadiran Program
+        </h3>
+
+        <div
+            id="programAttendance"
+            class="chart-placeholder"
+        >
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     MAKLUMAT PERSATUAN
+============================================================= -->
+
+<section
+    id="page-maklumat"
+    class="page-section"
+    data-module-page="association"
+>
+
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                Maklumat Persatuan
+            </h2>
+
+            <p>
+                Maklumat rasmi sistem DM3.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="data-card">
+
+        <div class="form-grid">
+
+
+            <div>
+
+                <strong>
+                    Nama Persatuan
+                </strong>
+
+                <p id="association-name">
+                    Persatuan Penduduk Desa Mentari 3
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Nama Sistem
+                </strong>
+
+                <p id="app-name">
+                    DM3 Management System
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Yuran Tahunan
+                </strong>
+
+                <p id="annual-fee-info">
+                    RM 15.00
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Yuran
+                </strong>
+
+                <p id="association-annual-fee">
+                    RM 15.00
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     TETAPAN
+============================================================= -->
+
+<section
+    id="page-tetapan"
+    class="page-section"
+    data-module-page="settings"
+>
+
+
+    <div class="page-heading">
+
+        <div>
+
+            <h2>
+                Tetapan
+            </h2>
+
+            <p>
+                Kemaskini maklumat asas sistem.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="data-card">
+
+        <div class="form-grid">
+
+
+            <div class="form-group">
+
+                <label
+                    for="settings-app-name"
+                >
+                    Nama Sistem
+                </label>
+
+                <input
+                    id="settings-app-name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label
+                    for="settings-association-name"
+                >
+                    Nama Persatuan
+                </label>
+
+                <input
+                    id="settings-association-name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label
+                    for="settings-annual-fee"
+                >
+                    Yuran Tahunan (RM)
+                </label>
+
+                <input
+                    id="settings-annual-fee"
+                    type="number"
+                    step="0.01"
+                    value="15"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button
+                type="button"
+                id="saveSettingsButton"
+                class="primary-button"
+            >
+
+                <i
+                    class="fa-solid fa-floppy-disk"
+                ></i>
+
+                Simpan Tetapan
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     TUTUP PAGE CONTENT
+============================================================= -->
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ============================================================
+     GLOBAL MODALS / UI
+============================================================= -->
+
+
+<!-- ============================================================
+     KEHADIRAN MANUAL
+============================================================= -->
+
+<div
+    id="manualAttendanceModal"
+    class="modal hidden"
+>
+
+
+    <div
+        class="modal-overlay"
+        data-close-modal="manualAttendanceModal"
+    ></div>
+
+
+    <div
+        class="modal-dialog"
+        role="dialog"
+        aria-modal="true"
+    >
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3>
+                    Kehadiran Manual
+                </h3>
+
+                <p>
+                    Masukkan rekod kehadiran
+                    tanpa RFID.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="manualAttendanceModal"
+            >
+                &times;
+            </button>
+
+        </div>
+
+
+        <div
+            style="
+                padding:20px;
+            "
+        >
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label
+                        for="manualMember"
+                    >
+                        Ahli
+                    </label>
+
+                    <select
+                        id="manualMember"
+                    >
+
+                        <option value="">
+                            -- Pilih Ahli --
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label
+                        for="manualProgram"
+                    >
+                        Program
+                    </label>
+
+                    <select
+                        id="manualProgram"
+                    >
+
+                        <option value="">
+                            -- Pilih Program --
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label
+                        for="manualDate"
+                    >
+                        Tarikh
+                    </label>
+
+                    <input
+                        id="manualDate"
+                        type="date"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-close-modal="manualAttendanceModal"
+                >
+                    Batal
+                </button>
+
+
+                <button
+                    id="saveManualAttendance"
+                    type="button"
+                    class="primary-button"
+                >
+
+                    <i
+                        class="fa-solid fa-check"
+                    ></i>
+
+                    Simpan
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     TOAST
+============================================================= -->
+
+<div
+    id="toastContainer"
+    class="toast-container"
+></div>
+
+
+<!-- ============================================================
+     LOADING OVERLAY dengan PROGRESS BAR
+     
+     PENTING:
+     z-index = 90000
+     Modal     = 100000
+============================================================= -->
+
+<div
+    id="loadingOverlay"
+    class="loading-overlay hidden"
+>
+
+    <div class="loading-box">
+
+        <div class="spinner"></div>
+
+        <div id="loadingText">
+            Sedang memproses...
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- TAMBAHAN: PROGRESS BAR & STATUS -->
+        <!-- ========================================================== -->
+
+        <div id="loadingProgressWrap" style="display:none;margin-top:18px;">
+            
+            <div style="
+                width:300px;
+                height:10px;
+                background:#e5eaf1;
+                border-radius:10px;
+                overflow:hidden;
+                margin:0 auto;
+            ">
+                <div id="loadingProgressBar" style="
+                    width:0%;
+                    height:100%;
+                    background:linear-gradient(90deg,#3b82f6,#2563eb);
+                    border-radius:10px;
+                    transition:width .35s ease;
+                "></div>
+            </div>
+
+            <div id="loadingProgressText" style="
+                margin-top:10px;
+                font-size:13px;
+                color:#475569;
+                text-align:center;
+                font-weight:700;
+                letter-spacing:0.5px;
+            ">0%</div>
+
+            <div id="loadingStepText" style="
+                margin-top:6px;
+                font-size:11px;
+                color:#94a3b8;
+                text-align:center;
+                font-weight:500;
+            "></div>
+
+        </div>
+
+        <!-- ========================================================== -->
+
+    </div>
+
+</div>
+<!-- ============================================================
+     JAVASCRIPT
+     
+     URUTAN MESTI KEKAL:
+     
+     1. api.js
+     2. script.js
+     3. ahli.js
+     4. ajk.js
+     5. program.js
+     6. rfid.js
+============================================================= -->
+
+
+<!-- ============================================================
+     API
+============================================================= -->
+
+<script
+    src="js/api.js"
+></script>
+
+
+<!-- ============================================================
+     MAIN SCRIPT V4.3
+============================================================= -->
+
+<script
+    src="js/script.js"
+></script>
+
+
+<!-- ============================================================
+     AHLI V4.7
+============================================================= -->
+
+<script
+    src="js/ahli.js"
+></script>
+
+
+<!-- ============================================================
+     AJK V4.6
+============================================================= -->
+
+<script
+    src="js/ajk.js"
+></script>
+
+
+<!-- ============================================================
+     PROGRAM
+============================================================= -->
+
+<script
+    src="js/program.js"
+></script>
+
+
+<!-- ============================================================
+     RFID
+============================================================= -->
+
+<script
+    src="js/rfid.js"
+></script>
+
+
+<!-- ============================================================
+     SMALL UI SUPPORT
+     
+     HANYA untuk:
+     - mobile sidebar
+     - tutup modal generik
+     
+     JANGAN letak logic API / login / AJK
+     di sini.
+============================================================= -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+
+            console.log(
+                "========================================"
+            );
+
+            console.log(
+                "DM3 INDEX.HTML V4.7 FULL CLEAN"
+            );
+
+            console.log(
+                "========================================"
+            );
+
+
+            /* =====================================================
+               ELEMENT CHECK
+            ===================================================== */
+
+            const requiredIds = [
+
+                "loginScreen",
+
+                "loginForm",
+
+                "username",
+
+                "password",
+
+                "togglePassword",
+
+                "loginButton",
+
+                "app",
+
+                "sidebar",
+
+                "openSidebar",
+
+                "closeSidebar",
+
+                "sidebarOverlay",
+
+                "page-dashboard",
+
+                "page-ahli",
+
+                "page-ajk",
+
+                "page-portfolio",
+
+                "page-program",
+
+                "page-rfid",
+
+                "page-statistik",
+
+                "page-maklumat",
+
+                "page-tetapan",
+
+                "membersTableBody",
+
+                "ajkTableBody",
+
+                "loadingOverlay",
+
+                "toastContainer"
+
+            ];
+
+
+            requiredIds.forEach(
+                function (id) {
+
+                    const element =
+                        document.getElementById(id);
+
+                    console.log(
+                        "[DM3 INDEX V4.7]",
+                        "#" + id + ":",
+                        !!element
+                    );
+
+                }
+            );
+
+
+            /* =====================================================
+               MOBILE SIDEBAR
+            ===================================================== */
+
+            const sidebar =
+                document.getElementById(
+                    "sidebar"
+                );
+
+            const openSidebar =
+                document.getElementById(
+                    "openSidebar"
+                );
+
+            const closeSidebar =
+                document.getElementById(
+                    "closeSidebar"
+                );
+
+            const sidebarOverlay =
+                document.getElementById(
+                    "sidebarOverlay"
+                );
+
+
+            function openMobileSidebar() {
+
+                if (sidebar) {
+
+                    sidebar.classList.add(
+                        "active"
+                    );
+
+                    sidebar.classList.add(
+                        "open"
+                    );
+
+                }
+
+                if (sidebarOverlay) {
+
+                    sidebarOverlay.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+
+
+            function closeMobileSidebar() {
+
+                if (sidebar) {
+
+                    sidebar.classList.remove(
+                        "active"
+                    );
+
+                    sidebar.classList.remove(
+                        "open"
+                    );
+
+                }
+
+                if (sidebarOverlay) {
+
+                    sidebarOverlay.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }
+
+
+            if (openSidebar) {
+
+                openSidebar.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        openMobileSidebar();
+
+                    }
+                );
+
+            }
+
+
+            if (closeSidebar) {
+
+                closeSidebar.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        closeMobileSidebar();
+
+                    }
+                );
+
+            }
+
+
+            if (sidebarOverlay) {
+
+                sidebarOverlay.addEventListener(
+                    "click",
+                    function () {
+
+                        closeMobileSidebar();
+
+                    }
+                );
+
+            }
+
+
+            /* =====================================================
+               TUTUP SIDEBAR SELEPAS MENU KLIK
+            ===================================================== */
+
+            document
+                .querySelectorAll(
+                    ".sidebar-menu [data-module]"
+                )
+                .forEach(
+                    function (button) {
+
+                        button.addEventListener(
+                            "click",
+                            function () {
+
+                                closeMobileSidebar();
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            /* =====================================================
+               GENERIC MODAL CLOSE
+               
+               TIDAK menyentuh #ajk-modal
+               jika ajk.js mengurusnya sendiri.
+            ===================================================== */
+
+            document
+                .querySelectorAll(
+                    "[data-close-modal]"
+                )
+                .forEach(
+                    function (element) {
+
+                        element.addEventListener(
+                            "click",
+                            function (event) {
+
+                                event.preventDefault();
+
+                                const modalId =
+                                    element.getAttribute(
+                                        "data-close-modal"
+                                    );
+
+                                if (!modalId) {
+                                    return;
+                                }
+
+
+                                const modal =
+                                    document.getElementById(
+                                        modalId
+                                    );
+
+                                if (!modal) {
+                                    return;
+                                }
+
+
+                                /*
+                                 * AJK MODAL:
+                                 *
+                                 * Jangan paksa logic sendiri.
+                                 * ajk.js V4.6 memiliki handler
+                                 * modal sendiri.
+                                 */
+
+                                if (
+                                    modalId ===
+                                    "ajk-modal"
+                                ) {
+
+                                    return;
+
+                                }
+
+
+                                modal.classList.add(
+                                    "hidden"
+                                );
+
+                                modal.style.display =
+                                    "none";
+
+                                modal.style.visibility =
+                                    "hidden";
+
+                                modal.style.opacity =
+                                    "0";
+
+                                modal.style.pointerEvents =
+                                    "none";
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            /* =====================================================
+               PASTIKAN LOADING OVERLAY TERSEMBUNYI
+               
+               Selepas page siap, jangan biarkan
+               overlay lama kekal menutup skrin.
+            ===================================================== */
+
+            const loadingOverlay =
+                document.getElementById(
+                    "loadingOverlay"
+                );
+
+
+            if (loadingOverlay) {
+
+                /*
+                 * Jangan paksa hide semasa
+                 * aplikasi sedang loading.
+                 *
+                 * Hanya pastikan class hidden
+                 * wujud pada permulaan.
+                 */
+
+                loadingOverlay.classList.add(
+                    "hidden"
+                );
+
+            }
+
+
+            /* =====================================================
+               MODAL SAFETY
+               
+               Jika AJK modal dicipta kemudian oleh ajk.js,
+               CSS global di atas akan memastikan:
+               
+               #ajk-modal = z-index 100000
+               #loadingOverlay = z-index 90000
+            ===================================================== */
+
+            const modalStyle =
+                document.createElement(
+                    "style"
+                );
+
+            modalStyle.id =
+                "dm3-index-v47-modal-safety";
+
+
+            modalStyle.textContent = `
+
+                #ajk-modal {
+                    position: fixed !important;
+                    inset: 0 !important;
+                    z-index: 100000 !important;
+                }
+
+                #ajk-modal.hidden {
+                    display: none !important;
+                    visibility: hidden !important;
+                    opacity: 0 !important;
+                    pointer-events: none !important;
+                }
+
+                #ajk-modal .modal-overlay {
+                    position: absolute !important;
+                    inset: 0 !important;
+                    z-index: 0 !important;
+                }
+
+                #ajk-modal .modal-dialog {
+                    position: relative !important;
+                    z-index: 1 !important;
+                }
+
+                #loadingOverlay {
+                    z-index: 90000 !important;
+                }
+
+                #loadingOverlay.hidden {
+                    display: none !important;
+                    visibility: hidden !important;
+                    opacity: 0 !important;
+                    pointer-events: none !important;
+                }
+
+            `;
+
+
+            document.head.appendChild(
+                modalStyle
+            );
+
+
+            console.log(
+                "DM3 INDEX V4.7 DOM READY"
+            );
+
+
+        }
+    );
+
+})();
+
+</script>
+
+
+</body>
+
+</html>
