@@ -1410,56 +1410,40 @@ function bindProgramEvents() {
     }
 
         /* --- SAVE / SUBMIT BUTTON --- */
-    if (!window.__DM3_PROGRAM_SAVE_BOUND__) {
-        window.__DM3_PROGRAM_SAVE_BOUND__ = true;
+if (!window.__DM3_PROGRAM_SAVE_BOUND__) {
+    window.__DM3_PROGRAM_SAVE_BOUND__ = true;
 
-        document.addEventListener("click", function (event) {
+    document.addEventListener("click", function (event) {
 
-            const btn = event.target.closest(
-                "#program-modal button[type='submit'], " +
-                "#program-modal .primary-button, " +
-                "#program-save-btn"
-            );
+        const btn = event.target.closest(
+            "#program-modal button[type='submit'], " +
+            "#program-modal .primary-button, " +
+            "#program-save-btn"
+        );
 
-            if (!btn) return;
+        if (!btn) return;
+        if (!btn.closest("#program-form")) return;
+        if (btn.hasAttribute("data-close-modal")) return;
 
-            if (!btn.closest("#program-form")) return;
+        event.preventDefault();
+        event.stopPropagation();
 
-            if (btn.hasAttribute("data-close-modal")) return;
+        // ==========================================================
+        // LOCK PADA BUTANG — guna dataset, bukan state global
+        // ==========================================================
+        if (btn.dataset.dm3Saving === "1") {
+            programLog("Butang sedang save — klik diabaikan.");
+            return;
+        }
+        btn.dataset.dm3Saving = "1";
+        btn.disabled = true;
+        // ==========================================================
 
-            // ==========================================================
-            // LOCK SEGERA — Elak user klik banyak kali
-            // ==========================================================
-            if (btn.disabled) {
-                programLog("Butang sudah disabled — klik diabaikan.");
-                return;
-            }
-            btn.disabled = true;
-            // ==========================================================
+        programLog("Save button clicked (modal delegation).");
+        handleProgramFormSubmit(event);
+    });
 
-            event.preventDefault();
-            event.stopPropagation();
-
-            programLog("Save button clicked (modal delegation).");
-            handleProgramFormSubmit(event);
-        });
-
-        programLog("Save button bound (delegation).");
-    }
-
-    /* --- ESCAPE --- */
-    if (!window.__DM3_PROGRAM_ESCAPE_BOUND__) {
-        window.__DM3_PROGRAM_ESCAPE_BOUND__ = true;
-        document.addEventListener("keydown", function (event) {
-            if (event.key !== "Escape") return;
-            const mm = document.getElementById(PROGRAM_CONFIG.modalId);
-            if (mm && mm.classList.contains("show")) { closeProgramModal(); return; }
-            const vm = document.getElementById(PROGRAM_CONFIG.viewModalId);
-            if (vm && vm.classList.contains("show")) { programHideModal(vm); }
-        });
-    }
-
-    programLog("All program events bound.");
+    programLog("Save button bound (delegation).");
 }
 
 /* ============================================================================
