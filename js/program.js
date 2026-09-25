@@ -1439,11 +1439,12 @@ if (!window.__DM3_PROGRAM_SAVE_BOUND__) {
         btn.disabled = true;
         // ==========================================================
 
-        programLog("Save button clicked (modal delegation).");
+         programLog("Save button clicked (modal delegation).");
         handleProgramFormSubmit(event);
     });
 
     programLog("Save button bound (delegation).");
+    }
 }
 
 /* ============================================================================
