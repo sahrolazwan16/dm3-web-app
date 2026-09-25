@@ -268,7 +268,7 @@ function ensureProgramModal() {
                 <button type="button" id="program-modal-close" class="modal-close"
                         data-close-modal="program-modal" aria-label="Tutup">&times;</button>
             </div>
-            <form id="program-form" autocomplete="off">
+            <form id="program-form" autocomplete="off" onsubmit="return false;">
                 <input type="hidden" id="program-id" name="id">
                 <div class="modal-body">
                     <div class="form-group">
@@ -1211,6 +1211,17 @@ async function confirmDeleteProgram(id) {
 
 async function handleProgramFormSubmit(event) {
     if (event) event.preventDefault();
+
+    // ==========================================================
+    // GUARD: Elak double submit
+    // ==========================================================
+    if (window.__DM3_PROGRAM_SUBMITTING__) {
+        programLog("Submit diabaikan — sedang proses.");
+        return false;
+    }
+    window.__DM3_PROGRAM_SUBMITTING__ = true;
+    // ==========================================================
+
     programLog("Form submitted.");
 
     const formData = readProgramForm();
@@ -1218,6 +1229,7 @@ async function handleProgramFormSubmit(event) {
 
     if (!validation.valid) {
         programNotify(validation.message, "warning");
+        window.__DM3_PROGRAM_SUBMITTING__ = false;  // ← Lepaskan lock
         return false;
     }
 
@@ -1230,6 +1242,34 @@ async function handleProgramFormSubmit(event) {
         saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
     }
 
+    // ==========================================================
+    // OVERLAY — Halang user klik merata-rata semasa save
+    // ==========================================================
+    let blockOverlay = document.getElementById("dm3-block-overlay");
+    if (!blockOverlay) {
+        blockOverlay = document.createElement("div");
+        blockOverlay.id = "dm3-block-overlay";
+        blockOverlay.style.cssText = `
+            position: fixed;
+            inset: 0;
+            z-index: 9999999;
+            background: rgba(10, 20, 40, 0.5);
+            backdrop-filter: blur(2px);
+            cursor: wait;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        `;
+        blockOverlay.innerHTML = '<div>MENYIMPAN...</div>';
+        document.body.appendChild(blockOverlay);
+    }
+    blockOverlay.style.display = "flex";
+    // ==========================================================
+
     try {
         const response = id
             ? await updateProgram(formData)
@@ -1241,10 +1281,12 @@ async function handleProgramFormSubmit(event) {
             "success"
         );
         return true;
+
     } catch (error) {
         programError("Submit gagal:", error);
         programNotify(error.message || "Gagal simpan program.", "error");
         return false;
+
     } finally {
         if (saveBtn) {
             saveBtn.disabled = false;
@@ -1252,6 +1294,21 @@ async function handleProgramFormSubmit(event) {
                 saveBtn.innerHTML = saveBtn.dataset.originalText;
             }
         }
+
+        // ==========================================================
+        // BUANG OVERLAY
+        // ==========================================================
+        const blockOverlay = document.getElementById("dm3-block-overlay");
+        if (blockOverlay) {
+            blockOverlay.style.display = "none";
+        }
+        // ==========================================================
+
+        // ==========================================================
+        // LEPASKAN LOCK
+        // ==========================================================
+        window.__DM3_PROGRAM_SUBMITTING__ = false;
+        // ==========================================================
     }
 }
 
@@ -1352,7 +1409,7 @@ function bindProgramEvents() {
         programLog("Table actions bound (delegation).");
     }
 
-    /* --- SAVE / SUBMIT BUTTON --- */
+        /* --- SAVE / SUBMIT BUTTON --- */
     if (!window.__DM3_PROGRAM_SAVE_BOUND__) {
         window.__DM3_PROGRAM_SAVE_BOUND__ = true;
 
@@ -1369,6 +1426,16 @@ function bindProgramEvents() {
             if (!btn.closest("#program-form")) return;
 
             if (btn.hasAttribute("data-close-modal")) return;
+
+            // ==========================================================
+            // LOCK SEGERA — Elak user klik banyak kali
+            // ==========================================================
+            if (btn.disabled) {
+                programLog("Butang sudah disabled — klik diabaikan.");
+                return;
+            }
+            btn.disabled = true;
+            // ==========================================================
 
             event.preventDefault();
             event.stopPropagation();
