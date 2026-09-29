@@ -1334,7 +1334,7 @@
        30. NAVIGATION MAP
        ====================================================================== */
 
-    const MODULE_MAP = {
+        const MODULE_MAP = {
         dashboard: "page-dashboard",
         members: "page-ahli",
         ahli: "page-ahli",
@@ -1342,6 +1342,7 @@
         portfolio: "page-portfolio",
         programs: "page-program",
         program: "page-program",
+        yuran: "page-yuran",
         attendance: "page-rfid",
         rfid: "page-rfid",
         statistics: "page-statistik",
@@ -1440,9 +1441,13 @@
                 renderPortfolioModule();
                 break;
 
-            case "program":
+                        case "program":
             case "programs":
                 renderProgramsModule();
+                break;
+
+            case "yuran":
+                renderYuranModule();
                 break;
 
             case "attendance":
@@ -1754,6 +1759,22 @@
         });
 
         return true;
+    }
+
+        /* ======================================================================
+       YURAN RENDERER
+       ====================================================================== */
+
+    function renderYuranModule() {
+
+        console.log("[DM3 YURAN] Membuka modul Pengurusan Yuran...");
+
+        // Panggil fungsi dari yuran.js
+        if (window.DM3_YURAN && typeof window.DM3_YURAN.init === "function") {
+            window.DM3_YURAN.init();
+        } else {
+            console.warn("[DM3 YURAN] DM3_YURAN belum tersedia.");
+        }
     }
 
 

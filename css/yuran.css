@@ -1,0 +1,722 @@
+/* ============================================================================
+   DM3 PENGURUSAN YURAN
+   yuran.css V1.0
+   Persatuan Penduduk Desa Mentari 3
+
+   BAHAGIAN:
+   1. TAB TAHUN
+   2. KAD RINGKASAN
+   3. TOOLBAR & SEARCH
+   4. JADUAL YURAN
+   5. BADGE STATUS
+   6. BUTANG TINDAKAN
+   7. PAGINATION
+   8. RESPONSIVE MOBILE
+============================================================================ */
+
+
+/* ============================================================================
+   1. TAB TAHUN
+============================================================================ */
+
+.yuran-tahun-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.yuran-tahun-tab {
+    padding: 10px 20px;
+    border: 1px solid #d7dee9;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #475569;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    min-width: 80px;
+}
+
+.yuran-tahun-tab:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.yuran-tahun-tab.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.yuran-tahun-tab:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* ============================================================================
+   2. KAD RINGKASAN
+============================================================================ */
+
+.yuran-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.yuran-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #e5eaf1;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.035);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.yuran-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.yuran-summary-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.yuran-summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.yuran-summary-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.yuran-summary-value {
+    font-size: 24px;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Aktif - Hijau */
+.yuran-summary-aktif {
+    border-left: 4px solid #16a34a;
+}
+.yuran-summary-aktif .yuran-summary-icon {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+.yuran-summary-aktif .yuran-summary-value {
+    color: #16a34a;
+}
+
+/* Tertunggak - Merah */
+.yuran-summary-tunggak {
+    border-left: 4px solid #dc2626;
+}
+.yuran-summary-tunggak .yuran-summary-icon {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+.yuran-summary-tunggak .yuran-summary-value {
+    color: #dc2626;
+}
+
+/* Kutipan - Biru */
+.yuran-summary-kutipan {
+    border-left: 4px solid #2563eb;
+}
+.yuran-summary-kutipan .yuran-summary-icon {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+.yuran-summary-kutipan .yuran-summary-value {
+    color: #2563eb;
+}
+
+
+/* ============================================================================
+   3. TOOLBAR & SEARCH
+============================================================================ */
+
+.yuran-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.yuran-actions .secondary-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+/* ============================================================================
+   4. JADUAL YURAN
+============================================================================ */
+
+#yuranTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+}
+
+#yuranTable thead {
+    background: #f8fafc;
+}
+
+#yuranTable th {
+    padding: 14px 12px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 800;
+    color: #334155;
+    border-bottom: 2px solid #e5eaf1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+#yuranTable td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 13px;
+    color: #1e293b;
+    vertical-align: middle;
+}
+
+#yuranTable tbody tr {
+    transition: background 0.15s ease;
+}
+
+#yuranTable tbody tr:hover {
+    background: #f8fafc;
+}
+
+#yuranTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Nama - bold */
+#yuranTable td:nth-child(2) {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* No Rumah - monospace */
+#yuranTable td:nth-child(3) {
+    font-family: ui-monospace, 'Consolas', monospace;
+    font-weight: 600;
+    color: #475569;
+}
+
+/* Jawatan */
+#yuranTable td:nth-child(4) {
+    color: #64748b;
+    font-weight: 600;
+}
+
+/* Tarikh Bayar - monospace */
+#yuranTable td:nth-child(6) {
+    font-family: ui-monospace, 'Consolas', monospace;
+    color: #475569;
+}
+
+/* Kaedah */
+#yuranTable td:nth-child(7) {
+    color: #64748b;
+}
+
+
+/* ============================================================================
+   5. BADGE STATUS
+============================================================================ */
+
+.yuran-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.yuran-status-aktif {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+
+.yuran-status-tunggak {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+
+/* ============================================================================
+   6. BUTANG TINDAKAN
+============================================================================ */
+
+.yuran-bayar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.yuran-bayar-btn {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.yuran-bayar-btn:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+}
+
+.yuran-bayar-btn:active {
+    transform: translateY(0);
+}
+
+.yuran-view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border: 1px solid #d7dee9;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.yuran-view-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+
+/* ============================================================================
+   7. PAGINATION
+============================================================================ */
+
+.yuran-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #e5eaf1;
+    flex-wrap: wrap;
+}
+
+.yuran-pagination-info {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.yuran-pagination-controls {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.yuran-pagination-btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #d7dee9;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.yuran-pagination-btn:hover:not(:disabled) {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.yuran-pagination-btn.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+.yuran-pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+
+/* ============================================================================
+   8. RESPONSIVE — MOBILE & TABLET
+============================================================================ */
+
+/* Tablet: 900px ke bawah */
+@media (max-width: 900px) {
+
+    .yuran-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .yuran-actions {
+        width: 100%;
+    }
+
+    .yuran-actions .secondary-button {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+
+/* Telefon: 600px ke bawah — TUKAR JADUAL JADI KAD */
+@media (max-width: 600px) {
+
+    .yuran-tahun-tabs {
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+
+    .yuran-tahun-tab {
+        padding: 8px 14px;
+        font-size: 13px;
+        min-width: 60px;
+    }
+
+    .yuran-summary-card {
+        padding: 14px;
+    }
+
+    .yuran-summary-icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        font-size: 18px;
+    }
+
+    .yuran-summary-value {
+        font-size: 20px;
+    }
+
+    /* Toolbar jadi menegak */
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .toolbar .search-box {
+        width: 100%;
+    }
+
+    #yuranFilter {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* JADUAL jadi KAD */
+    #yuranTable thead {
+        display: none;
+    }
+
+    #yuranTable,
+    #yuranTable tbody,
+    #yuranTable tr,
+    #yuranTable td {
+        display: block;
+        width: 100%;
+    }
+
+    #yuranTable tr {
+        background: #ffffff;
+        border: 1px solid #e5eaf1;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        padding: 14px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        position: relative;
+    }
+
+    #yuranTable td {
+        padding: 6px 0;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+    }
+
+    #yuranTable td::before {
+        content: attr(data-label);
+        font-weight: 800;
+        color: #64748b;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        min-width: 90px;
+        flex-shrink: 0;
+    }
+
+    /* Bil - jadi bulatan kecil di atas */
+    #yuranTable td:nth-child(1) {
+        font-weight: 900;
+        font-size: 14px;
+        color: #2563eb;
+        border-bottom: 1px solid #edf0f5;
+        padding-bottom: 10px;
+        margin-bottom: 8px;
+    }
+
+    #yuranTable td:nth-child(1)::before {
+        content: "Ahli #";
+    }
+
+    /* Nama besar */
+    #yuranTable td:nth-child(2) {
+        font-size: 16px;
+        font-weight: 800;
+        color: #0f172a;
+        padding: 8px 0;
+    }
+
+    #yuranTable td:nth-child(2)::before {
+        content: "";
+        display: none;
+    }
+
+    /* Tindakan - butang besar */
+    #yuranTable td:nth-child(8) {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #edf0f5;
+    }
+
+    #yuranTable td:nth-child(8)::before {
+        content: "";
+        display: none;
+    }
+
+    .yuran-bayar-btn,
+    .yuran-view-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    /* Pagination */
+    .yuran-pagination {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .yuran-pagination-controls {
+        justify-content: center;
+    }
+}
+
+/* ============================================================================
+   MATRIX VIEW — Semua tahun dalam satu jadual
+============================================================================ */
+
+.yuran-matrix-table {
+    table-layout: auto;
+}
+
+.yuran-matrix-table th,
+.yuran-matrix-table td {
+    padding: 10px 8px;
+    vertical-align: middle;
+}
+
+.yuran-matrix-table th.year-current {
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 900;
+}
+
+.yuran-matrix-table td.year-cell {
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.yuran-matrix-table td.year-cell:hover {
+    background: #f0f9ff;
+}
+
+.yuran-matrix-table td.year-cell.paid {
+    color: #16a34a;
+}
+
+.yuran-matrix-table td.year-cell.unpaid {
+    color: #dc2626;
+}
+
+.yuran-matrix-table td.year-cell.future {
+    color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+.yuran-matrix-table td.year-cell.year-current-col {
+    background: #eff6ff;
+}
+
+.yuran-matrix-table td.year-cell.paid .year-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #16a34a;
+    font-size: 14px;
+}
+
+.yuran-matrix-table td.year-cell.unpaid .year-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 14px;
+}
+
+.yuran-matrix-table td.year-cell.future .year-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.yuran-matrix-table td.year-cell.is-saving {
+    background: #fef3c7;
+    cursor: wait;
+}
+
+.yuran-matrix-table td:nth-child(1) {
+    text-align: center;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.yuran-matrix-table td:nth-child(2) {
+    font-weight: 700;
+    color: #0f172a;
+    min-width: 200px;
+}
+
+.yuran-matrix-table td:nth-child(3) {
+    font-family: ui-monospace, 'Consolas', monospace;
+    color: #475569;
+}
+
+.yuran-matrix-table td:last-child {
+    text-align: center;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .yuran-matrix-table thead {
+        display: table-header-group;
+    }
+
+    .yuran-matrix-table,
+    .yuran-matrix-table tbody,
+    .yuran-matrix-table tr,
+    .yuran-matrix-table td,
+    .yuran-matrix-table th {
+        display: table-cell;
+    }
+
+    .yuran-matrix-table {
+        font-size: 11px;
+        min-width: 640px;
+    }
+
+    .yuran-matrix-table th,
+    .yuran-matrix-table td {
+        padding: 8px 4px;
+    }
+
+    .yuran-matrix-table td:nth-child(2) {
+        min-width: 130px;
+        font-size: 12px;
+    }
+
+    .yuran-matrix-table td.year-cell .year-icon {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+    }
+
+    .yuran-matrix-table th:nth-child(1),
+    .yuran-matrix-table td:nth-child(1) {
+        width: 32px;
+    }
+}

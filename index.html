@@ -58,6 +58,11 @@
     >
 
     <link
+    rel="stylesheet"
+    href="css/yuran.css"
+>
+
+    <link
         rel="stylesheet"
         href="css/rfid.css"
     >
@@ -2183,6 +2188,22 @@
 
             </button>
 
+            <!-- =====================================================
+     PENGURUSAN YURAN
+====================================================== -->
+<button
+    type="button"
+    data-module="yuran"
+>
+
+    <i
+        class="fa-solid fa-money-bill-wave"
+    ></i>
+
+    Pengurusan Yuran
+
+</button>
+<!-- ===================================================== -->
 
             <button
                 type="button"
@@ -3368,6 +3389,128 @@
 
 
 <!-- ============================================================
+     PENGURUSAN YURAN
+============================================================= -->
+
+<section
+    id="page-yuran"
+    class="page-section"
+    data-module-page="yuran"
+>
+
+    <div class="page-heading">
+        <div>
+            <h2>Pengurusan Yuran</h2>
+            <p>Pengurusan yuran tahunan ahli persatuan.</p>
+        </div>
+    </div>
+
+        <!-- TAB TAHUN — dijana automatik oleh yuran.js -->
+    <div class="yuran-tahun-tabs" id="yuranTahunTabs"></div>
+
+    <!-- RINGKASAN -->
+    <div class="yuran-summary" id="yuranSummary">
+        <div class="yuran-summary-card yuran-summary-aktif">
+            <div class="yuran-summary-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="yuran-summary-content">
+                <span class="yuran-summary-label">AKTIF</span>
+                <strong class="yuran-summary-value" id="yuranCountAktif">0</strong>
+            </div>
+        </div>
+
+        <div class="yuran-summary-card yuran-summary-tunggak">
+            <div class="yuran-summary-icon">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </div>
+            <div class="yuran-summary-content">
+                <span class="yuran-summary-label">TERTUNGGAK</span>
+                <strong class="yuran-summary-value" id="yuranCountTunggak">0</strong>
+            </div>
+        </div>
+
+        <div class="yuran-summary-card yuran-summary-kutipan">
+            <div class="yuran-summary-icon">
+                <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+            <div class="yuran-summary-content">
+                <span class="yuran-summary-label">KUTIPAN</span>
+                <strong class="yuran-summary-value" id="yuranKutipan">RM 0.00</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- JADUAL -->
+    <div class="data-card">
+        <div class="card-header">
+            <div>
+                <h3 id="yuranSenaraiTitle">Senarai Yuran 2026</h3>
+                <p id="yuranSenaraiSubtitle">Status yuran ahli untuk tahun 2026.</p>
+            </div>
+
+            <div class="yuran-actions">
+                <button type="button" id="yuranRefreshBtn" class="secondary-button" title="Refresh">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    Refresh
+                </button>
+                <button type="button" id="yuranReminderBtn" class="secondary-button" title="Hantar Reminder">
+                    <i class="fa-solid fa-bell"></i>
+                    Hantar Reminder
+                </button>
+                <button type="button" id="yuranExportBtn" class="secondary-button" title="Export">
+                    <i class="fa-solid fa-download"></i>
+                    Export
+                </button>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <input id="yuranSearch" class="search-box" type="search" placeholder="Cari nama atau no. rumah...">
+                        <select id="yuranFilter" class="search-box" style="width:auto;min-width:200px;">
+                <option value="semua">Semua Ahli</option>
+                <option value="sudah_bayar">✅ Sudah Bayar 2026</option>
+                <option value="belum_bayar">❌ Belum Bayar 2026</option>
+            </select>
+        </div>
+
+                <div class="table-container">
+            <table id="yuranTable" class="data-table yuran-matrix-table">
+                <thead>
+                    <tr>
+                        <th style="width:50px;">Bil.</th>
+                        <th>Nama</th>
+                        <th style="width:110px;">No. Rumah</th>
+                        <th style="width:70px;text-align:center;">2024</th>
+                        <th style="width:70px;text-align:center;">2025</th>
+                        <th style="width:70px;text-align:center;" class="year-current">2026</th>
+                        <th style="width:70px;text-align:center;">2027</th>
+                        <th style="width:70px;text-align:center;">2028</th>
+                        <th style="width:100px;text-align:center;">Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody id="yuranTableBody">
+                    <tr>
+                        <td colspan="9" class="empty-table">
+                            Memuatkan data yuran...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="yuran-pagination" id="yuranPagination">
+            <div class="yuran-pagination-info" id="yuranPaginationInfo">
+                Papar 0 daripada 0
+            </div>
+            <div class="yuran-pagination-controls" id="yuranPaginationControls"></div>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ============================================================
      RFID
 ============================================================= -->
 
@@ -4468,6 +4611,13 @@
     src="js/program.js"
 ></script>
 
+<!-- ============================================================
+     YURAN
+============================================================= -->
+
+<script
+    src="js/yuran.js"
+></script>
 
 <!-- ============================================================
      RFID

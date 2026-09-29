@@ -512,7 +512,14 @@ const DM3_WRITE_ACTIONS = [
     "updatePortfolio",
     "deletePortfolio",
     "saveSettings",
-    "addData"
+    "addData",
+
+    // ==========================================================
+    // YURAN — Operasi tulis (tidak boleh retry untuk elak duplikat)
+    // ==========================================================
+    "addYuran",
+    "updateYuran",
+    "deleteYuran"
 ];
 
 function isWriteAction(action) {
