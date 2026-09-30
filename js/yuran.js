@@ -624,64 +624,234 @@
     }
 
 
-    /* ===== BUTANG REMINDER ===== */
+        /* ===== BUTANG REMINDER (MODAL PILIH AHLI) ===== */
 
     function bindReminder() {
         const btn = $id("yuranReminderBtn");
         if (!btn) return;
 
         btn.addEventListener("click", function () {
-            const tahun = YURAN_CONFIG.tahunSemasa;
-            const tertunggak = (YURAN_STATE.rawData.senarai || []).filter(function (r) {
-                const rr = r.rekodTahun && r.rekodTahun[tahun];
-                return !rr || rr.status !== "Aktif";
-            });
+            openReminderModal();
+        });
 
-            if (tertunggak.length === 0) {
-                showToast("Tiada ahli tertunggak.", "info");
+        const selectAll = $id("reminderSelectAll");
+        const clearAll = $id("reminderClearAll");
+        const sendBtn = $id("reminderSendBtn");
+
+        if (selectAll) {
+            selectAll.addEventListener("click", function () {
+                document.querySelectorAll(".reminder-check").forEach(function (cb) {
+                    cb.checked = true;
+                    const item = cb.closest(".reminder-item");
+                    if (item) item.classList.add("checked");
+                });
+                updateReminderCount();
+            });
+        }
+
+        if (clearAll) {
+            clearAll.addEventListener("click", function () {
+                document.querySelectorAll(".reminder-check").forEach(function (cb) {
+                    cb.checked = false;
+                    const item = cb.closest(".reminder-item");
+                    if (item) item.classList.remove("checked");
+                });
+                updateReminderCount();
+            });
+        }
+
+        if (sendBtn) {
+            sendBtn.addEventListener("click", function () {
+                sendReminderSelected();
+            });
+        }
+
+        const list = $id("reminderList");
+        if (list) {
+            list.addEventListener("change", function (e) {
+                if (e.target.classList.contains("reminder-check")) {
+                    const item = e.target.closest(".reminder-item");
+                    if (item) item.classList.toggle("checked", e.target.checked);
+                    updateReminderCount();
+                }
+            });
+        }
+    }
+
+
+    function openReminderModal() {
+        const tahun = YURAN_SELECTED_YEAR || YURAN_CONFIG.tahunSemasa;
+        const senarai = (YURAN_STATE.rawData && YURAN_STATE.rawData.senarai) || [];
+
+        const tertunggak = senarai.filter(function (r) {
+            const rr = r.rekodTahun && r.rekodTahun[tahun];
+            return !rr || rr.status !== "Aktif";
+        });
+
+        if (tertunggak.length === 0) {
+            showToast("Tiada ahli tertunggak untuk tahun " + tahun + ".", "info");
+            return;
+        }
+
+        const sub = $id("reminderModalSubtitle");
+        if (sub) {
+            sub.textContent = tertunggak.length + " ahli tertunggak untuk tahun " + tahun + ". Pilih yang mahu diingatkan.";
+        }
+
+        const listEl = $id("reminderList");
+        if (!listEl) return;
+
+        listEl.innerHTML = tertunggak.map(function (m) {
+            const telp = String(m.telepon || m.telefon || "").trim();
+            const telpDisplay = telp
+                ? escapeHtml(telp)
+                : '<span class="no-phone">Tiada no. telefon</span>';
+
+            return '<label class="reminder-item" data-ahli-id="' + escapeHtml(m.ahliId) + '">' +
+                '<input type="checkbox" class="reminder-check"' +
+                ' data-ahli-id="' + escapeHtml(m.ahliId) + '"' +
+                ' data-nama="' + escapeHtml(m.nama) + '"' +
+                ' data-telepon="' + escapeHtml(telp) + '"' +
+                ' data-rumah="' + escapeHtml(m.noRumah || "") + '">' +
+                '<div class="reminder-info">' +
+                    '<strong>' + escapeHtml(m.nama) + '</strong>' +
+                    '<span>' + escapeHtml(m.noRumah || "-") + ' • ' + telpDisplay + '</span>' +
+                '</div>' +
+            '</label>';
+        }).join("");
+
+        updateReminderCount();
+
+        const modal = $id("yuranReminderModal");
+        if (modal) {
+            modal.classList.remove("hidden");
+            modal.style.display = "flex";
+        }
+
+        log("Reminder modal dibuka:", tertunggak.length, "ahli tertunggak.");
+    }
+
+
+    function updateReminderCount() {
+        const countEl = $id("reminderSelectedCount");
+        if (!countEl) return;
+
+        const checked = document.querySelectorAll(".reminder-check:checked").length;
+        countEl.textContent = String(checked);
+    }
+
+
+    function closeReminderModal() {
+        const modal = $id("yuranReminderModal");
+        if (modal) {
+            modal.classList.add("hidden");
+            modal.style.display = "none";
+        }
+    }
+
+
+    function sendReminderSelected() {
+        const checked = Array.from(document.querySelectorAll(".reminder-check:checked"));
+
+        if (checked.length === 0) {
+            showToast("Sila pilih sekurang-kurangnya 1 ahli.", "warning");
+            return;
+        }
+
+        const kaedah = ($id("reminderKaedah") || {}).value || "whatsapp";
+        const tahun = YURAN_SELECTED_YEAR || YURAN_CONFIG.tahunSemasa;
+        const jumlah = (YURAN_STATE.rawData && YURAN_STATE.rawData.jumlahYuran) || 15;
+
+        if (kaedah === "whatsapp") {
+            sendWhatsAppReminder(checked, tahun, jumlah);
+        } else {
+            sendEmailReminder(checked, tahun, jumlah);
+        }
+
+        closeReminderModal();
+    }
+
+
+    function sendWhatsAppReminder(selectedCheckboxes, tahun, jumlah) {
+        const withPhone = selectedCheckboxes.filter(function (cb) {
+            return String(cb.getAttribute("data-telepon") || "").trim().length > 0;
+        });
+
+        const withoutPhone = selectedCheckboxes.filter(function (cb) {
+            return String(cb.getAttribute("data-telepon") || "").trim().length === 0;
+        });
+
+        if (withPhone.length === 0) {
+            showToast(
+                "Tiada ahli dipilih mempunyai no. telefon. " +
+                "Kemaskini no. telefon di modul Ahli.",
+                "warning"
+            );
+            return;
+        }
+
+        let index = 0;
+
+        function openNext() {
+            if (index >= withPhone.length) {
+                showToast(
+                    "Selesai " + withPhone.length + " tab WhatsApp dibuka." +
+                    (withoutPhone.length > 0 ? " (" + withoutPhone.length + " tiada no. telefon)" : ""),
+                    "success"
+                );
                 return;
             }
 
-            const pilihan = window.prompt(
-                "Hantar reminder kepada " + tertunggak.length + " ahli tertunggak " + tahun + ".\n\n" +
-                "1 = WhatsApp\n" +
-                "2 = Email\n\n" +
-                "Masukkan nombor (1/2):",
-                "1"
-            );
+            const cb = withPhone[index];
+            const nama = cb.getAttribute("data-nama");
+            const telp = normalizePhone(cb.getAttribute("data-telepon"));
 
-            if (!pilihan) return;
+            const msg = "*PERINGATAN YURAN " + tahun + "*\n\n" +
+                "Assalamualaikum " + nama + ",\n\n" +
+                "Peringatan mesra: yuran keahlian tahun *" + tahun + "* " +
+                "berjumlah *RM " + Number(jumlah).toFixed(2) + "* masih belum dijelaskan.\n\n" +
+                "Sila jelaskan segera. Terima kasih.\n\n" +
+                "- Persatuan Penduduk Desa Mentari 3";
 
-            const jumlah = YURAN_STATE.rawData.jumlahYuran || 15;
+            const url = "https://wa.me/" + telp + "?text=" + encodeURIComponent(msg);
+            window.open(url, "_blank");
 
-            if (pilihan === "1") {
-                // WhatsApp — hantar ke first only (WA limit)
-                const names = tertunggak.slice(0, 5).map(function (r) { return r.nama; }).join(", ");
-                const msg =
-                    "*PERINGATAN YURAN " + tahun + "*\n\n" +
-                    "Ahli tertunggak (" + tertunggak.length + "):\n" +
-                    names + (tertunggak.length > 5 ? "\n...(" + (tertunggak.length - 5) + " lagi)" : "") + "\n\n" +
-                    "Jumlah: RM " + Number(jumlah).toFixed(2) + " setiap ahli\n\n" +
-                    "Sila jelaskan segera. Terima kasih.\n\n" +
-                    "- Persatuan Penduduk Desa Mentari 3";
-                window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
-                showToast("WhatsApp dibuka.", "info");
-            } else if (pilihan === "2") {
-                const subject = "Peringatan Yuran " + tahun + " - DM3";
-                let body = "Assalamualaikum,\n\n";
-                body += "Peringatan yuran tahun " + tahun + " (RM " + Number(jumlah).toFixed(2) + ") masih belum dijelaskan.\n\n";
-                body += "Senarai ahli tertunggak (" + tertunggak.length + "):\n\n";
-                tertunggak.forEach(function (r, i) {
-                    body += (i + 1) + ". " + r.nama + " (" + (r.noRumah || "-") + ")\n";
-                });
-                body += "\nSila jelaskan segera. Terima kasih.\n\n- DM3";
-                window.location.href = "mailto:?subject=" +
-                    encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-                showToast("Email dibuka.", "info");
-            } else {
-                showToast("Pilihan tidak sah.", "warning");
-            }
+            index++;
+            setTimeout(openNext, 2000);
+        }
+
+        openNext();
+    }
+
+
+    function sendEmailReminder(selectedCheckboxes, tahun, jumlah) {
+        const subject = "Peringatan Yuran " + tahun + " - DM3";
+        let body = "SENARAI AHLI TERTUNGGAK — " + tahun + "\n\n";
+        body += "Jumlah yuran: RM " + Number(jumlah).toFixed(2) + " setiap ahli\n\n";
+        body += "Sila jelaskan segera:\n\n";
+
+        selectedCheckboxes.forEach(function (cb, i) {
+            const nama = cb.getAttribute("data-nama");
+            const rumah = cb.getAttribute("data-rumah") || "-";
+            body += (i + 1) + ". " + nama + " (" + rumah + ")\n";
         });
+
+        body += "\nTerima kasih.\n\n- Persatuan Penduduk Desa Mentari 3";
+
+        window.location.href = "mailto:?subject=" +
+            encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        showToast("Email dibuka untuk " + selectedCheckboxes.length + " ahli.", "info");
+    }
+
+
+    function normalizePhone(phone) {
+        let s = String(phone || "").replace(/[^0-9]/g, "");
+
+        if (s.indexOf("60") === 0) return s;
+        if (s.indexOf("0") === 0) return "6" + s;
+        if (s.indexOf("6") === 0) return s;
+
+        return "60" + s;
     }
 
 
