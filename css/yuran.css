@@ -422,27 +422,39 @@
 
 
 /* Telefon: 600px ke bawah — TUKAR JADUAL JADI KAD */
+/* Telefon: 600px ke bawah — KEKALKAN JADUAL (Matrix View) */
 @media (max-width: 600px) {
 
     .yuran-tahun-tabs {
         gap: 6px;
         margin-bottom: 16px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
     }
 
     .yuran-tahun-tab {
         padding: 8px 14px;
         font-size: 13px;
-        min-width: 60px;
+        min-width: 65px;
+        flex-shrink: 0;
+    }
+
+    /* Kad ringkasan - susun menegak */
+    .yuran-summary {
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 
     .yuran-summary-card {
-        padding: 14px;
+        padding: 12px 14px;
     }
 
     .yuran-summary-icon {
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
         font-size: 18px;
     }
 
@@ -450,7 +462,7 @@
         font-size: 20px;
     }
 
-    /* Toolbar jadi menegak */
+    /* Toolbar menegak */
     .toolbar {
         flex-direction: column;
         align-items: stretch;
@@ -466,104 +478,68 @@
         min-width: 0 !important;
     }
 
-    /* JADUAL jadi KAD */
-    #yuranTable thead {
-        display: none;
+    /* ============================================================
+       JADUAL MATRIX — KEKALKAN JADUAL, SCROLL HORIZONTAL
+       ============================================================ */
+
+    .yuran-matrix-table {
+        min-width: 700px;
+        font-size: 12px;
     }
 
-    #yuranTable,
-    #yuranTable tbody,
-    #yuranTable tr,
-    #yuranTable td {
-        display: block;
-        width: 100%;
+    .yuran-matrix-table th,
+    .yuran-matrix-table td {
+        padding: 10px 6px;
     }
 
-    #yuranTable tr {
-        background: #ffffff;
-        border: 1px solid #e5eaf1;
-        border-radius: 12px;
-        margin-bottom: 12px;
-        padding: 14px;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-        position: relative;
+    .yuran-matrix-table th:nth-child(1),
+    .yuran-matrix-table td:nth-child(1) {
+        width: 36px;
+        text-align: center;
     }
 
-    #yuranTable td {
-        padding: 6px 0;
-        border: none;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    .yuran-matrix-table th:nth-child(2),
+    .yuran-matrix-table td:nth-child(2) {
+        min-width: 150px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .yuran-matrix-table th:nth-child(3),
+    .yuran-matrix-table td:nth-child(3) {
+        width: 90px;
+        font-size: 11px;
+    }
+
+    .yuran-matrix-table td.year-cell .year-icon {
+        width: 28px;
+        height: 28px;
         font-size: 13px;
     }
 
-    #yuranTable td::before {
-        content: attr(data-label);
-        font-weight: 800;
-        color: #64748b;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        min-width: 90px;
-        flex-shrink: 0;
-    }
-
-    /* Bil - jadi bulatan kecil di atas */
-    #yuranTable td:nth-child(1) {
-        font-weight: 900;
-        font-size: 14px;
-        color: #2563eb;
-        border-bottom: 1px solid #edf0f5;
-        padding-bottom: 10px;
-        margin-bottom: 8px;
-    }
-
-    #yuranTable td:nth-child(1)::before {
-        content: "Ahli #";
-    }
-
-    /* Nama besar */
-    #yuranTable td:nth-child(2) {
-        font-size: 16px;
-        font-weight: 800;
-        color: #0f172a;
-        padding: 8px 0;
-    }
-
-    #yuranTable td:nth-child(2)::before {
-        content: "";
-        display: none;
-    }
-
-    /* Tindakan - butang besar */
-    #yuranTable td:nth-child(8) {
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px solid #edf0f5;
-    }
-
-    #yuranTable td:nth-child(8)::before {
-        content: "";
-        display: none;
-    }
-
+    /* Butang Tindakan */
     .yuran-bayar-btn,
     .yuran-view-btn {
-        flex: 1;
-        justify-content: center;
-        padding: 12px;
-        font-size: 13px;
+        padding: 8px 10px;
+        font-size: 11px;
+        white-space: nowrap;
     }
 
     /* Pagination */
     .yuran-pagination {
         flex-direction: column;
         align-items: stretch;
+        gap: 10px;
     }
 
     .yuran-pagination-controls {
         justify-content: center;
+    }
+
+    /* Buang padding data-label dari jadual yuran sahaja */
+    #yuranTable td::before {
+        content: none !important;
+        display: none !important;
     }
 }
 
