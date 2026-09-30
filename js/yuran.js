@@ -666,6 +666,13 @@
             });
         }
 
+        const groupBtn = $id("reminderGroupBtn");
+        if (groupBtn) {
+            groupBtn.addEventListener("click", function () {
+                sendReminderToGroup();
+            });
+        }
+
         const list = $id("reminderList");
         if (list) {
             list.addEventListener("change", function (e) {
@@ -769,6 +776,109 @@
         }
 
         closeReminderModal();
+    }
+
+    
+    /* ==========================================================
+       HANTAR KE GROUP WHATSAPP — SEMUA AHLI TERTUNGGAK
+       ========================================================== */
+
+       function sendReminderToGroup() {
+
+        log("sendReminderToGroup() DIPANGGIL");
+
+        const tahunSemasa = YURAN_SELECTED_YEAR || YURAN_CONFIG.tahunSemasa;
+        const senarai = (YURAN_STATE.rawData && YURAN_STATE.rawData.senarai) || [];
+        const tahunList = YURAN_STATE.tahunList || [];
+        const jumlahYuran = (YURAN_STATE.rawData && YURAN_STATE.rawData.jumlahYuran) || 15;
+
+        const tertunggak = senarai.filter(function (r) {
+            const rr = r.rekodTahun && r.rekodTahun[tahunSemasa];
+            return !rr || rr.status !== "Aktif";
+        });
+
+        if (tertunggak.length === 0) {
+            showToast("Tiada ahli tertunggak untuk tahun " + tahunSemasa + ".", "info");
+            return;
+        }
+
+        const ahliDenganTahun = tertunggak.map(function (m) {
+            const tahunTertunggak = tahunList.filter(function (t) {
+                if (t > tahunSemasa) return false;
+                const rr = m.rekodTahun && m.rekodTahun[t];
+                return !rr || rr.status !== "Aktif";
+            });
+            return {
+                nama: m.nama || "-",
+                noRumah: m.noRumah || "-",
+                telepon: m.telepon || m.telefon || "",
+                tahunTertunggak: tahunTertunggak
+            };
+        }).filter(function (a) {
+            return a.tahunTertunggak.length > 0;
+        });
+
+        const kumpulan = {};
+        ahliDenganTahun.forEach(function (a) {
+            const tahunPalingLama = a.tahunTertunggak[0];
+            if (!kumpulan[tahunPalingLama]) {
+                kumpulan[tahunPalingLama] = [];
+            }
+            kumpulan[tahunPalingLama].push(a);
+        });
+
+        const tahunSorted = Object.keys(kumpulan).sort(function (a, b) {
+            return Number(a) - Number(b);
+        });
+
+        let msg = "*PERINGATAN YURAN PERSATUAN PENDUDUK DESA MENTARI 3*\n\n";
+        msg += "Assalamualaikum & Salam Sejahtera,\n\n";
+        msg += "Berikut adalah senarai ahli yang masih *BELUM MENJELASKAN* yuran keahlian:\n\n";
+
+        let jumlahKeseluruhan = 0;
+
+        tahunSorted.forEach(function (tahun) {
+            const ahliList = kumpulan[tahun];
+
+            msg += "━━━━━━━━━━━━━━━━━━━━━\n";
+            msg += "📅 *TERTUNGGAK MULAI " + tahun + "* (" + ahliList.length + " orang)\n";
+            msg += "━━━━━━━━━━━━━━━━━━━━━\n";
+
+            ahliList.forEach(function (a, i) {
+                const tahunStr = a.tahunTertunggak.join(", ");
+                msg += (i + 1) + ". *" + a.nama + "* (" + a.noRumah + ")\n";
+                msg += "    └ Tahun: " + tahunStr + "\n";
+                jumlahKeseluruhan += a.tahunTertunggak.length;
+            });
+
+            msg += "\n";
+        });
+
+        const jumlahAhli = ahliDenganTahun.length;
+
+        msg += "━━━━━━━━━━━━━━━━━━━━━\n";
+        msg += "📊 *RINGKASAN*\n";
+        msg += "━━━━━━━━━━━━━━━━━━━━━\n";
+        msg += "• Jumlah ahli tertunggak: *" + jumlahAhli + " orang*\n";
+        msg += "• Jumlah tahun tertunggak: *" + jumlahKeseluruhan + " tahun*\n";
+        msg += "• Yuran tahunan: *RM " + Number(jumlahYuran).toFixed(2) + "*\n\n";
+        msg += "Sila jelaskan segera kepada Bendahari.\n\n";
+        msg += "Terima kasih.\n";
+        msg += "_- AJK Persatuan Penduduk Desa Mentari 3_";
+
+        const preview = window.confirm(
+            "📋 PREVIEW MESEJ:\n\n" +
+            msg.substring(0, 600) +
+            (msg.length > 600 ? "\n\n...(lihat penuh di WhatsApp)" : "") +
+            "\n\nKlik OK untuk hantar ke WhatsApp."
+        );
+
+        if (!preview) return;
+
+        const url = "https://wa.me/?text=" + encodeURIComponent(msg);
+        window.open(url, "_blank");
+
+        showToast("WhatsApp dibuka — pilih group & hantar.", "success");
     }
 
 
