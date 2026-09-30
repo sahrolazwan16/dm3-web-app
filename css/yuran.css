@@ -1,17 +1,7 @@
 /* ============================================================================
    DM3 PENGURUSAN YURAN
-   yuran.css V1.0
+   yuran.css V3.0 CLEAN
    Persatuan Penduduk Desa Mentari 3
-
-   BAHAGIAN:
-   1. TAB TAHUN
-   2. KAD RINGKASAN
-   3. TOOLBAR & SEARCH
-   4. JADUAL YURAN
-   5. BADGE STATUS
-   6. BUTANG TINDAKAN
-   7. PAGINATION
-   8. RESPONSIVE MOBILE
 ============================================================================ */
 
 
@@ -26,6 +16,7 @@
     flex-wrap: wrap;
     overflow-x: auto;
     padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .yuran-tahun-tab {
@@ -40,6 +31,7 @@
     transition: all 0.2s ease;
     white-space: nowrap;
     min-width: 80px;
+    flex-shrink: 0;
 }
 
 .yuran-tahun-tab:hover {
@@ -53,11 +45,6 @@
     color: #ffffff;
     border-color: #2563eb;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-}
-
-.yuran-tahun-tab:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 
@@ -127,42 +114,21 @@
     text-overflow: ellipsis;
 }
 
-/* Aktif - Hijau */
-.yuran-summary-aktif {
-    border-left: 4px solid #16a34a;
-}
-.yuran-summary-aktif .yuran-summary-icon {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-}
-.yuran-summary-aktif .yuran-summary-value {
-    color: #16a34a;
-}
+.yuran-summary-aktif { border-left: 4px solid #16a34a; }
+.yuran-summary-aktif .yuran-summary-icon { background: linear-gradient(135deg, #22c55e, #16a34a); }
+.yuran-summary-aktif .yuran-summary-value { color: #16a34a; }
 
-/* Tertunggak - Merah */
-.yuran-summary-tunggak {
-    border-left: 4px solid #dc2626;
-}
-.yuran-summary-tunggak .yuran-summary-icon {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-}
-.yuran-summary-tunggak .yuran-summary-value {
-    color: #dc2626;
-}
+.yuran-summary-tunggak { border-left: 4px solid #dc2626; }
+.yuran-summary-tunggak .yuran-summary-icon { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.yuran-summary-tunggak .yuran-summary-value { color: #dc2626; }
 
-/* Kutipan - Biru */
-.yuran-summary-kutipan {
-    border-left: 4px solid #2563eb;
-}
-.yuran-summary-kutipan .yuran-summary-icon {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-}
-.yuran-summary-kutipan .yuran-summary-value {
-    color: #2563eb;
-}
+.yuran-summary-kutipan { border-left: 4px solid #2563eb; }
+.yuran-summary-kutipan .yuran-summary-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.yuran-summary-kutipan .yuran-summary-value { color: #2563eb; }
 
 
 /* ============================================================================
-   3. TOOLBAR & SEARCH
+   3. TOOLBAR & BUTANG
 ============================================================================ */
 
 .yuran-actions {
@@ -179,23 +145,25 @@
 
 
 /* ============================================================================
-   4. JADUAL YURAN
+   4. JADUAL MATRIX
 ============================================================================ */
 
-#yuranTable {
+.yuran-matrix-table {
     width: 100%;
+    table-layout: auto;
     border-collapse: collapse;
     background: #ffffff;
+    min-width: 700px;
 }
 
-#yuranTable thead {
+.yuran-matrix-table thead {
     background: #f8fafc;
 }
 
-#yuranTable th {
-    padding: 14px 12px;
+.yuran-matrix-table th {
+    padding: 12px 8px;
     text-align: left;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
     color: #334155;
     border-bottom: 2px solid #e5eaf1;
@@ -204,83 +172,105 @@
     white-space: nowrap;
 }
 
-#yuranTable td {
-    padding: 14px 12px;
+.yuran-matrix-table th.year-current {
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 900;
+}
+
+.yuran-matrix-table td {
+    padding: 12px 8px;
     border-bottom: 1px solid #edf0f5;
     font-size: 13px;
     color: #1e293b;
     vertical-align: middle;
 }
 
-#yuranTable tbody tr {
+.yuran-matrix-table tbody tr {
     transition: background 0.15s ease;
 }
 
-#yuranTable tbody tr:hover {
+.yuran-matrix-table tbody tr:hover {
     background: #f8fafc;
 }
 
-#yuranTable tbody tr:last-child td {
-    border-bottom: none;
+.yuran-matrix-table td:nth-child(1) {
+    text-align: center;
+    color: #64748b;
+    font-weight: 700;
+    width: 50px;
 }
 
-/* Nama - bold */
-#yuranTable td:nth-child(2) {
+.yuran-matrix-table td:nth-child(2) {
     font-weight: 700;
     color: #0f172a;
+    min-width: 180px;
 }
 
-/* No Rumah - monospace */
-#yuranTable td:nth-child(3) {
-    font-family: ui-monospace, 'Consolas', monospace;
-    font-weight: 600;
-    color: #475569;
-}
-
-/* Jawatan */
-#yuranTable td:nth-child(4) {
-    color: #64748b;
-    font-weight: 600;
-}
-
-/* Tarikh Bayar - monospace */
-#yuranTable td:nth-child(6) {
+.yuran-matrix-table td:nth-child(3) {
     font-family: ui-monospace, 'Consolas', monospace;
     color: #475569;
+    width: 110px;
 }
 
-/* Kaedah */
-#yuranTable td:nth-child(7) {
-    color: #64748b;
+.yuran-matrix-table td:last-child {
+    text-align: center;
+    width: 100px;
 }
 
 
 /* ============================================================================
-   5. BADGE STATUS
+   5. SEL TAHUN (CHECKMARK)
 ============================================================================ */
 
-.yuran-status {
+.yuran-matrix-table td.year-cell {
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+    width: 70px;
+}
+
+.yuran-matrix-table td.year-cell:hover {
+    background: #f0f9ff;
+}
+
+.yuran-matrix-table td.year-cell.year-current-col {
+    background: #eff6ff;
+}
+
+.yuran-matrix-table td.year-cell.future {
+    cursor: not-allowed;
+}
+
+.yuran-matrix-table td.year-cell.is-saving {
+    background: #fef3c7;
+    cursor: wait;
+}
+
+.year-icon {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 14px;
 }
 
-.yuran-status-aktif {
+.year-cell.paid .year-icon {
     background: #dcfce7;
-    color: #15803d;
-    border: 1px solid #86efac;
+    color: #16a34a;
 }
 
-.yuran-status-tunggak {
+.year-cell.unpaid .year-icon {
     background: #fee2e2;
-    color: #b91c1c;
-    border: 1px solid #fca5a5;
+    color: #dc2626;
+}
+
+.year-cell.future .year-icon {
+    background: #f1f5f9;
+    color: #cbd5e1;
 }
 
 
@@ -288,11 +278,12 @@
    6. BUTANG TINDAKAN
 ============================================================================ */
 
-.yuran-bayar-btn {
+.yuran-bayar-btn,
+.yuran-view-btn {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 8px 14px;
+    padding: 8px 12px;
     border: 0;
     border-radius: 8px;
     font-size: 12px;
@@ -310,27 +301,12 @@
 .yuran-bayar-btn:hover {
     background: #15803d;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
-}
-
-.yuran-bayar-btn:active {
-    transform: translateY(0);
 }
 
 .yuran-view-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 12px;
-    border: 1px solid #d7dee9;
-    border-radius: 8px;
     background: #ffffff;
     color: #475569;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
+    border: 1px solid #d7dee9;
 }
 
 .yuran-view-btn:hover {
@@ -400,10 +376,9 @@
 
 
 /* ============================================================================
-   8. RESPONSIVE — MOBILE & TABLET
+   8. RESPONSIVE — TABLET (900px)
 ============================================================================ */
 
-/* Tablet: 900px ke bawah */
 @media (max-width: 900px) {
 
     .yuran-summary {
@@ -421,40 +396,34 @@
 }
 
 
-/* Telefon: 600px ke bawah — TUKAR JADUAL JADI KAD */
-/* Telefon: 600px ke bawah — KEKALKAN JADUAL (Matrix View) */
+/* ============================================================================
+   9. RESPONSIVE — TELEFON (600px)
+   KEKALKAN JADUAL + SCROLL HORIZONTAL
+============================================================================ */
+
 @media (max-width: 600px) {
 
+    /* Tab tahun */
     .yuran-tahun-tabs {
         gap: 6px;
         margin-bottom: 16px;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        padding-bottom: 6px;
-        -webkit-overflow-scrolling: touch;
     }
 
     .yuran-tahun-tab {
         padding: 8px 14px;
         font-size: 13px;
         min-width: 65px;
-        flex-shrink: 0;
     }
 
-    /* Kad ringkasan - susun menegak */
-    .yuran-summary {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
+    /* Kad ringkasan */
     .yuran-summary-card {
         padding: 12px 14px;
     }
 
     .yuran-summary-icon {
-        width: 42px;
-        height: 42px;
-        min-width: 42px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
         font-size: 18px;
     }
 
@@ -462,7 +431,7 @@
         font-size: 20px;
     }
 
-    /* Toolbar menegak */
+    /* Toolbar */
     .toolbar {
         flex-direction: column;
         align-items: stretch;
@@ -479,7 +448,7 @@
     }
 
     /* ============================================================
-       JADUAL MATRIX — KEKALKAN JADUAL, SCROLL HORIZONTAL
+       JADUAL MATRIX — KEKAL SEBAGAI JADUAL, SCROLL HORIZONTAL
        ============================================================ */
 
     .yuran-matrix-table {
@@ -489,40 +458,53 @@
 
     .yuran-matrix-table th,
     .yuran-matrix-table td {
-        padding: 10px 6px;
+        padding: 8px 5px;
     }
 
-    .yuran-matrix-table th:nth-child(1),
+    .yuran-matrix-table th {
+        font-size: 10px;
+    }
+
     .yuran-matrix-table td:nth-child(1) {
-        width: 36px;
-        text-align: center;
-    }
-
-    .yuran-matrix-table th:nth-child(2),
-    .yuran-matrix-table td:nth-child(2) {
-        min-width: 150px;
-        font-size: 13px;
-        font-weight: 700;
-    }
-
-    .yuran-matrix-table th:nth-child(3),
-    .yuran-matrix-table td:nth-child(3) {
-        width: 90px;
+        width: 34px;
         font-size: 11px;
     }
 
-    .yuran-matrix-table td.year-cell .year-icon {
-        width: 28px;
-        height: 28px;
-        font-size: 13px;
+    .yuran-matrix-table td:nth-child(2) {
+        min-width: 140px;
+        max-width: 140px;
+        font-size: 12px;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: break-word;
+    }
+
+    .yuran-matrix-table td:nth-child(3) {
+        width: 75px;
+        font-size: 10px;
+    }
+
+    .yuran-matrix-table td.year-cell {
+        width: 45px;
+    }
+
+    .year-cell .year-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
     }
 
     /* Butang Tindakan */
     .yuran-bayar-btn,
     .yuran-view-btn {
-        padding: 8px 10px;
-        font-size: 11px;
-        white-space: nowrap;
+        padding: 6px 8px;
+        font-size: 10px;
+        gap: 3px;
+    }
+
+    .yuran-bayar-btn i,
+    .yuran-view-btn i {
+        font-size: 10px;
     }
 
     /* Pagination */
@@ -534,165 +516,13 @@
 
     .yuran-pagination-controls {
         justify-content: center;
+        flex-wrap: wrap;
     }
 
-    /* Buang padding data-label dari jadual yuran sahaja */
-    #yuranTable td::before {
-        content: none !important;
-        display: none !important;
-    }
-}
-
-/* ============================================================================
-   MATRIX VIEW — Semua tahun dalam satu jadual
-============================================================================ */
-
-.yuran-matrix-table {
-    table-layout: auto;
-}
-
-.yuran-matrix-table th,
-.yuran-matrix-table td {
-    padding: 10px 8px;
-    vertical-align: middle;
-}
-
-.yuran-matrix-table th.year-current {
-    background: #dbeafe;
-    color: #1e40af;
-    font-weight: 900;
-}
-
-.yuran-matrix-table td.year-cell {
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.15s ease;
-    font-size: 16px;
-    font-weight: 900;
-}
-
-.yuran-matrix-table td.year-cell:hover {
-    background: #f0f9ff;
-}
-
-.yuran-matrix-table td.year-cell.paid {
-    color: #16a34a;
-}
-
-.yuran-matrix-table td.year-cell.unpaid {
-    color: #dc2626;
-}
-
-.yuran-matrix-table td.year-cell.future {
-    color: #cbd5e1;
-    cursor: not-allowed;
-}
-
-.yuran-matrix-table td.year-cell.year-current-col {
-    background: #eff6ff;
-}
-
-.yuran-matrix-table td.year-cell.paid .year-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #dcfce7;
-    color: #16a34a;
-    font-size: 14px;
-}
-
-.yuran-matrix-table td.year-cell.unpaid .year-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #fee2e2;
-    color: #dc2626;
-    font-size: 14px;
-}
-
-.yuran-matrix-table td.year-cell.future .year-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #f1f5f9;
-    color: #cbd5e1;
-    font-size: 14px;
-}
-
-.yuran-matrix-table td.year-cell.is-saving {
-    background: #fef3c7;
-    cursor: wait;
-}
-
-.yuran-matrix-table td:nth-child(1) {
-    text-align: center;
-    color: #64748b;
-    font-weight: 700;
-}
-
-.yuran-matrix-table td:nth-child(2) {
-    font-weight: 700;
-    color: #0f172a;
-    min-width: 200px;
-}
-
-.yuran-matrix-table td:nth-child(3) {
-    font-family: ui-monospace, 'Consolas', monospace;
-    color: #475569;
-}
-
-.yuran-matrix-table td:last-child {
-    text-align: center;
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-
-    .yuran-matrix-table thead {
-        display: table-header-group;
-    }
-
-    .yuran-matrix-table,
-    .yuran-matrix-table tbody,
-    .yuran-matrix-table tr,
-    .yuran-matrix-table td,
-    .yuran-matrix-table th {
-        display: table-cell;
-    }
-
-    .yuran-matrix-table {
-        font-size: 11px;
-        min-width: 640px;
-    }
-
-    .yuran-matrix-table th,
-    .yuran-matrix-table td {
-        padding: 8px 4px;
-    }
-
-    .yuran-matrix-table td:nth-child(2) {
-        min-width: 130px;
+    .yuran-pagination-btn {
+        min-width: 32px;
+        height: 32px;
+        padding: 0 8px;
         font-size: 12px;
-    }
-
-    .yuran-matrix-table td.year-cell .year-icon {
-        width: 22px;
-        height: 22px;
-        font-size: 11px;
-    }
-
-    .yuran-matrix-table th:nth-child(1),
-    .yuran-matrix-table td:nth-child(1) {
-        width: 32px;
     }
 }
