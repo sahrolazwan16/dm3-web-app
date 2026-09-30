@@ -4474,6 +4474,56 @@
 
 </div>
 
+<!-- ============================================================
+     REMINDER YURAN — MODAL PILIH AHLI
+============================================================= -->
+
+<div id="yuranReminderModal" class="modal hidden">
+    <div class="modal-overlay" data-close-modal="yuranReminderModal"></div>
+
+    <div class="modal-dialog" role="dialog" aria-modal="true">
+        <div class="modal-header">
+            <div>
+                <h3>Hantar Peringatan Yuran</h3>
+                <p id="reminderModalSubtitle">Pilih ahli yang anda mahu ingatkan.</p>
+            </div>
+            <button type="button" class="modal-close" data-close-modal="yuranReminderModal">&times;</button>
+        </div>
+
+        <div style="padding: 20px;">
+
+            <!-- KAWALAN -->
+            <div class="reminder-toolbar">
+                <button type="button" id="reminderSelectAll" class="secondary-button">
+                    <i class="fa-solid fa-check-double"></i> Pilih Semua
+                </button>
+                <button type="button" id="reminderClearAll" class="secondary-button">
+                    <i class="fa-solid fa-eraser"></i> Kosongkan
+                </button>
+                <select id="reminderKaedah" class="search-box" style="width: auto; min-width: 140px;">
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="email">Email</option>
+                </select>
+            </div>
+
+            <!-- SENARAI AHLI -->
+            <div class="reminder-list" id="reminderList">
+                <div class="reminder-empty">Memuatkan...</div>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="secondary-button" data-close-modal="yuranReminderModal">
+                Batal
+            </button>
+            <button type="button" id="reminderSendBtn" class="primary-button">
+                <i class="fa-solid fa-paper-plane"></i>
+                Hantar (<span id="reminderSelectedCount">0</span>)
+            </button>
+        </div>
+    </div>
+</div>
 
 <!-- ============================================================
      TOAST
