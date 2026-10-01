@@ -615,9 +615,8 @@
 
     /* ===== SEARCH & FILTER ===== */
 
-        function bindSearchFilter() {
+            function bindSearchFilter() {
         const search = $id("yuranSearch");
-        const filter = $id("yuranFilter");
         const sort = $id("yuranSort");
 
         if (search) {
@@ -632,15 +631,7 @@
             });
         }
 
-        if (filter) {
-            filter.addEventListener("change", function () {
-                YURAN_STATE.filterStatus = filter.value;
-                YURAN_STATE.currentPage = 1;
-                renderJadual();
-            });
-        }
-
-        // ✅ Bind dropdown susun
+        // Dropdown susun
         if (sort) {
             sort.value = YURAN_STATE.sortBy || "rumah";
 
