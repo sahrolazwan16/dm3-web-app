@@ -30,7 +30,7 @@
         }
     };
 
-    const YURAN_STATE = {
+        const YURAN_STATE = {
         initialized: false,
         rawData: null,
         filteredData: [],
@@ -38,6 +38,7 @@
         currentPage: 1,
         searchTerm: "",
         filterStatus: "semua",
+        sortBy: "rumah",      
         loading: false
     };
 
@@ -177,6 +178,44 @@
     }
 
 
+        /* ===== SORT HELPER — Parse No. Rumah ===== */
+
+    function parseNoRumah(noRumah) {
+        const str = String(noRumah || "").trim();
+        const parts = str.split("-");
+
+        return {
+            blok: parseInt(parts[0], 10) || 0,
+            aras: parts[1] === "G" ? 0 : (parseInt(parts[1], 10) || 0),
+            rumah: parseInt(parts[2], 10) || 0,
+            raw: str
+        };
+    }
+
+    function sortSenarai(list) {
+        const mode = YURAN_STATE.sortBy || "rumah";
+
+        return list.slice().sort(function (a, b) {
+            if (mode === "nama") {
+                return String(a.nama || "").localeCompare(String(b.nama || ""), "ms");
+            }
+
+            const pa = parseNoRumah(a.noRumah);
+            const pb = parseNoRumah(b.noRumah);
+
+            if (mode === "aras") {
+                if (pa.aras !== pb.aras) return pa.aras - pb.aras;
+                if (pa.blok !== pb.blok) return pa.blok - pb.blok;
+                return pa.rumah - pb.rumah;
+            }
+
+            // default: "rumah"
+            if (pa.blok !== pb.blok) return pa.blok - pb.blok;
+            if (pa.aras !== pb.aras) return pa.aras - pb.aras;
+            return pa.rumah - pb.rumah;
+        });
+    }
+
     /* ===== FILTER & PAGINATION ===== */
 
     function applyFilter() {
@@ -186,7 +225,7 @@
         }
 
         let list = YURAN_STATE.rawData.senarai.slice();
-                const tahun = YURAN_SELECTED_YEAR || YURAN_CONFIG.tahunSemasa;
+        const tahun = YURAN_SELECTED_YEAR || YURAN_CONFIG.tahunSemasa;
 
         // Filter
         if (YURAN_STATE.filterStatus === "sudah_bayar") {
@@ -211,9 +250,11 @@
             });
         }
 
+        // ✅ SUSUN
+        list = sortSenarai(list);
+
         YURAN_STATE.filteredData = list;
     }
-
 
     /* ===== RENDER JADUAL MATRIX ===== */
 
@@ -574,9 +615,10 @@
 
     /* ===== SEARCH & FILTER ===== */
 
-    function bindSearchFilter() {
+        function bindSearchFilter() {
         const search = $id("yuranSearch");
         const filter = $id("yuranFilter");
+        const sort = $id("yuranSort");
 
         if (search) {
             let timer = null;
@@ -593,6 +635,17 @@
         if (filter) {
             filter.addEventListener("change", function () {
                 YURAN_STATE.filterStatus = filter.value;
+                YURAN_STATE.currentPage = 1;
+                renderJadual();
+            });
+        }
+
+        // ✅ Bind dropdown susun
+        if (sort) {
+            sort.value = YURAN_STATE.sortBy || "rumah";
+
+            sort.addEventListener("change", function () {
+                YURAN_STATE.sortBy = sort.value;
                 YURAN_STATE.currentPage = 1;
                 renderJadual();
             });
