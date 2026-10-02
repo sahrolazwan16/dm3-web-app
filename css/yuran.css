@@ -531,45 +531,66 @@
         box-shadow: 2px 0 4px rgba(15, 23, 42, 0.06);
     }
 
+        /* ============================================================
+       STICKY — Kolum 1 (Bil.) — kecil
+       ============================================================ */
+
+    .yuran-matrix-table th:nth-child(1),
+    .yuran-matrix-table td:nth-child(1) {
+        position: sticky;
+        left: 0;
+        z-index: 3;
+        background: #ffffff;
+        width: 32px;
+        min-width: 32px;
+        max-width: 32px;
+        text-align: center;
+        font-size: 10px;
+        padding: 6px 2px;
+        box-shadow: 2px 0 4px rgba(15, 23, 42, 0.06);
+    }
+
     /* ============================================================
-       STICKY — Kolum 2 (Nama)
+       STICKY — Kolum 2 (Nama) — kecilkan dari 150px → 110px
        ============================================================ */
 
     .yuran-matrix-table th:nth-child(2),
     .yuran-matrix-table td:nth-child(2) {
         position: sticky;
-        left: 36px;                  /* = lebar kolum 1 */
+        left: 32px;
         z-index: 3;
         background: #ffffff;
-        width: 150px;
-        min-width: 150px;
-        max-width: 150px;
-        font-size: 12px;
+        width: 110px;
+        min-width: 110px;
+        max-width: 110px;
+        font-size: 10px;
         font-weight: 700;
         white-space: normal;
         word-break: normal;
         overflow-wrap: break-word;
-        line-height: 1.25;
+        line-height: 1.15;
+        padding: 6px 4px;
         box-shadow: 2px 0 4px rgba(15, 23, 42, 0.08);
     }
 
     /* ============================================================
-       STICKY — Kolum 3 (No. Rumah)
+       STICKY — Kolum 3 (No. Rumah) — kecilkan dari 78px → 58px
        ============================================================ */
 
     .yuran-matrix-table th:nth-child(3),
     .yuran-matrix-table td:nth-child(3) {
         position: sticky;
-        left: 186px;                 /* = 36 + 150 */
+        left: 142px;                 /* = 32 + 110 */
         z-index: 3;
         background: #ffffff;
-        width: 78px;
-        min-width: 78px;
-        max-width: 78px;
+        width: 58px;
+        min-width: 58px;
+        max-width: 58px;
         font-family: ui-monospace, 'Consolas', monospace;
-        font-size: 10px;
+        font-size: 9px;
         text-align: center;
-        box-shadow: 3px 0 6px rgba(15, 23, 42, 0.10);
+        padding: 6px 2px;
+        box-shadow: 3px 0 6px rgba(15, 23, 42, 0.12);
     }
 
     /* Header sticky — background berbeza + z-index lebih tinggi */
@@ -740,5 +761,39 @@
 
     .reminder-item {
         padding: 8px 10px;
+    }
+}
+
+/* Hint scroll di kanan jadual — tanda ada tahun lagi */
+@media (max-width: 600px) {
+    .table-container {
+        position: relative;
+    }
+
+    .table-container::after {
+        content: "→";
+        position: absolute;
+        top: 50%;
+        right: 4px;
+        transform: translateY(-50%);
+        width: 26px;
+        height: 26px;
+        background: #2563eb;
+        color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 13px;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        pointer-events: none;
+        animation: dm3ScrollHint 1.5s ease-in-out infinite;
+        z-index: 10;
+    }
+
+    @keyframes dm3ScrollHint {
+        0%, 100% { transform: translateY(-50%) translateX(0); opacity: 1; }
+        50%      { transform: translateY(-50%) translateX(-6px); opacity: 0.6; }
     }
 }
