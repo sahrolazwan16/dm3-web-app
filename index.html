@@ -2635,7 +2635,7 @@
 
     <!-- SEARCH -->
 
-    <div class="data-card">
+        <div class="data-card">
 
         <div class="toolbar">
 
@@ -2646,19 +2646,23 @@
                 placeholder="Cari nama, no. rumah, RFID..."
             >
 
+            <select
+                id="member-sort"
+                class="search-box"
+                style="width:auto;min-width:200px;"
+            >
+                <option value="nama">👤 Susun: Nama (A-Z)</option>
+                <option value="rumah">🏠 Susun: No. Rumah</option>
+                <option value="jawatan">⭐ Susun: Jawatan</option>
+            </select>
 
             <button
                 type="button"
                 id="dm3AhliRefreshButton"
                 class="secondary-button"
             >
-
-                <i
-                    class="fa-solid fa-arrows-rotate"
-                ></i>
-
+                <i class="fa-solid fa-arrows-rotate"></i>
                 Refresh
-
             </button>
 
         </div>

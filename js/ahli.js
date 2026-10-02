@@ -57,8 +57,9 @@
        2. STATE
        ====================================================================== */
 
-    let editingId = null;
+       let editingId = null;
     let searchText = "";
+    let sortBy = "nama";        // ✅ TAMBAH — default susun ikut nama
     let initialized = false;
     let saving = false;
 
@@ -331,49 +332,98 @@
        14. SEARCH
        ====================================================================== */
 
+        /* ===== PARSE NO. RUMAH ===== */
+
+    function parseNoRumahAhli(noRumah) {
+        const str = String(noRumah || "").trim();
+        const parts = str.split("-");
+
+        return {
+            blok: parseInt(parts[0], 10) || 0,
+            aras: parts[1] === "G" ? 0 : (parseInt(parts[1], 10) || 0),
+            rumah: parseInt(parts[2], 10) || 0,
+            raw: str
+        };
+    }
+
+    /* ===== SUSUN SENARAI AHLI ===== */
+
+    function sortMembersAhli(list) {
+        const mode = sortBy || "nama";
+
+        return list.slice().sort(function (a, b) {
+            if (mode === "rumah") {
+                const pa = parseNoRumahAhli(
+                    a.noRumah ?? a["No Rumah"] ?? a["No. Rumah"] ?? ""
+                );
+                const pb = parseNoRumahAhli(
+                    b.noRumah ?? b["No Rumah"] ?? b["No. Rumah"] ?? ""
+                );
+
+                if (pa.blok !== pb.blok) return pa.blok - pb.blok;
+                if (pa.aras !== pb.aras) return pa.aras - pb.aras;
+                return pa.rumah - pb.rumah;
+            }
+
+            if (mode === "jawatan") {
+                const ja = String(a.jawatan ?? a.Jawatan ?? "").toLowerCase();
+                const jb = String(b.jawatan ?? b.Jawatan ?? "").toLowerCase();
+                return ja.localeCompare(jb, "ms");
+            }
+
+            // default: "nama" — A-Z
+            const na = String(a.nama ?? a.Nama ?? a.name ?? "");
+            const nb = String(b.nama ?? b.Nama ?? b.name ?? "");
+            return na.localeCompare(nb, "ms");
+        });
+    }
+
     function getFilteredMembers() {
         const members = getMembersArray();
         const search = normalize(searchText);
 
-        if (!search) {
-            return members;
+        let list = members;
+
+        if (search) {
+            list = members.filter(function (member) {
+                const text = [
+                    member.id,
+                    member.ID,
+                    member.uidRfid,
+                    member["UID RFID"],
+                    member.uid,
+                    member.rfid,
+                    member.nama,
+                    member.Nama,
+                    member.name,
+                    member.noKp,
+                    member.NoKp,
+                    member["No. K/P"],
+                    member["No K/P"],
+                    member.noRumah,
+                    member["No Rumah"],
+                    member["No. Rumah"],
+                    member.telefon,
+                    member.Telepon,
+                    member.Telefon,
+                    member.phone,
+                    member.noTelefon,
+                    member.email,
+                    member.status,
+                    member.Status,
+                    member.jawatan,
+                    member.Jawatan,
+                    member.statusBayaran
+                ]
+                    .map(normalize)
+                    .join(" ");
+
+                return text.includes(search);
+            });
         }
 
-        return members.filter(function (member) {
-            const text = [
-                member.id,
-                member.ID,
-                member.uidRfid,
-                member["UID RFID"],
-                member.uid,
-                member.rfid,
-                member.nama,
-                member.Nama,
-                member.name,
-                member.noKp,
-                member.NoKp,
-                member["No. K/P"],
-                member["No K/P"],
-                member.noRumah,
-                member["No Rumah"],
-                member["No. Rumah"],
-                member.telefon,
-                member.Telepon,
-                member.Telefon,
-                member.phone,
-                member.noTelefon,
-                member.email,
-                member.status,
-                member.Status,
-                member.jawatan,
-                member.Jawatan,
-                member.statusBayaran
-            ]
-                .map(normalize)
-                .join(" ");
-
-            return text.includes(search);
-        });
+        // ✅ SUSUN
+        return sortMembersAhli(list);
     }
 
 
@@ -1423,6 +1473,22 @@
             });
 
             console.log("[DM3 AHLI] SEARCH INPUT READY");
+        }
+
+                /* --- SORT DROPDOWN --- */
+        const sortSelect = byId("member-sort");
+
+        if (sortSelect) {
+            // Set nilai awal
+            sortSelect.value = sortBy;
+
+            sortSelect.addEventListener("change", function (event) {
+                sortBy = event.target.value;
+                render();
+                console.log("[DM3 AHLI] SORT:", sortBy);
+            });
+
+            console.log("[DM3 AHLI] SORT DROPDOWN READY");
         }
 
         /* --- REFRESH BUTTON --- */
