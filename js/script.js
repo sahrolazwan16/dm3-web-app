@@ -1906,10 +1906,32 @@ async function refreshStatisticsData() {
 }
 
 
-    /* ======================================================================
+        /* ======================================================================
        44. BLOCK DISTRIBUTION
        Paparan: Aras + Jumlah Ahli sahaja
+       Susunan: G → 1 → 2 → 3 → ... → 17
        ====================================================================== */
+
+    function sortArasDM3(a, b) {
+        // "G" sentiasa di atas (Ground Floor)
+        if (a === "G" && b !== "G") return -1;
+        if (b === "G" && a !== "G") return 1;
+
+        const numA = parseInt(a, 10);
+        const numB = parseInt(b, 10);
+
+        // Kedua-dua nombor — susun menaik
+        if (!isNaN(numA) && !isNaN(numB)) {
+            return numA - numB;
+        }
+
+        // Nombor dahulu, teks kemudian
+        if (!isNaN(numA)) return -1;
+        if (!isNaN(numB)) return 1;
+
+        // Teks — abjad
+        return String(a).localeCompare(String(b));
+    }
 
     function renderBlockDistribution() {
 
@@ -1925,9 +1947,7 @@ async function refreshStatisticsData() {
 
         const distribution = DM3_STATE.dashboard?.blockDistribution || {};
 
-        const entries = Object.entries(distribution);
-
-        if (entries.length === 0) {
+        if (Object.keys(distribution).length === 0) {
             container.innerHTML = `
                 <div style="padding:25px;text-align:center;opacity:.6;">
                     Tiada data.
@@ -1935,6 +1955,16 @@ async function refreshStatisticsData() {
             `;
             return;
         }
+
+        // ==========================================================
+        // SUSUN: G → 1 → 2 → 3 → ... → 17
+        // ==========================================================
+        const sortedKeys = Object.keys(distribution).sort(sortArasDM3);
+
+        const entries = sortedKeys.map(function (key) {
+            return [key, distribution[key]];
+        });
+        // ==========================================================
 
         // Cari nilai maximum untuk scaling bar
         let maxCount = 0;
