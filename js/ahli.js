@@ -348,10 +348,11 @@
 
     /* ===== SUSUN SENARAI AHLI ===== */
 
-    function sortMembersAhli(list) {
+        function sortMembersAhli(list) {
         const mode = sortBy || "nama";
 
         return list.slice().sort(function (a, b) {
+
             if (mode === "rumah") {
                 const pa = parseNoRumahAhli(
                     a.noRumah ?? a["No Rumah"] ?? a["No. Rumah"] ?? ""
@@ -363,12 +364,6 @@
                 if (pa.blok !== pb.blok) return pa.blok - pb.blok;
                 if (pa.aras !== pb.aras) return pa.aras - pb.aras;
                 return pa.rumah - pb.rumah;
-            }
-
-            if (mode === "jawatan") {
-                const ja = String(a.jawatan ?? a.Jawatan ?? "").toLowerCase();
-                const jb = String(b.jawatan ?? b.Jawatan ?? "").toLowerCase();
-                return ja.localeCompare(jb, "ms");
             }
 
             // default: "nama" — A-Z
