@@ -358,10 +358,13 @@
        HID SCANNER (keyboard wedge)
     ========================================================== */
 
-    function bindHIDScanner() {
+        function bindHIDScanner() {
         const input = $("rfid-hidden-input");
         if (!input) return;
 
+        // ==========================================================
+        // INPUT KEYDOWN — terima UID dari HID scanner
+        // ==========================================================
         input.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
                 event.preventDefault();
@@ -373,44 +376,57 @@
             }
         });
 
-        document.addEventListener("click", function (event) {
-            const page = $("page-rfid");
+        // ==========================================================
+        // FIX: AUTO-FOCUS GLOBAL — hanya SATU interval
+        // Setiap 500ms, paksa input RFID focus
+        // Terutama bila Live Scan aktif
+        // ==========================================================
+        if (window.__DM3_RFID_AUTOFOCUS) {
+            clearInterval(window.__DM3_RFID_AUTOFOCUS);
+        }
+
+        window.__DM3_RFID_AUTOFOCUS = setInterval(function () {
+
             const liveScan = $("liveScanScreen");
             const isLiveScanOpen = liveScan && !liveScan.classList.contains("hidden");
 
-            if (!isLiveScanOpen && (!page || !page.contains(event.target))) return;
+            const page = $("page-rfid");
+            const isRfidPage = page && page.classList.contains("active");
 
-            const tag = (event.target.tagName || "").toUpperCase();
+            // Aktifkan auto-focus hanya bila Live Scan ATAU page RFID aktif
+            if (!isLiveScanOpen && !isRfidPage) return;
 
-            if (
-                tag === "SELECT" ||
-                tag === "OPTION" ||
-                tag === "INPUT" ||
-                tag === "TEXTAREA" ||
-                tag === "BUTTON" ||
-                tag === "LABEL" ||
-                event.target.closest(".modal-dialog") ||
-                event.target.closest("#rfidProgramSelect") ||
-                event.target.closest("#liveScanProgramSelect")
-            ) {
-                return;
+            const active = document.activeElement;
+
+            // Jangan rampas focus kalau user tengah taip dalam input/select lain
+            if (active) {
+                const tag = (active.tagName || "").toUpperCase();
+                if (
+                    active !== input &&
+                    (
+                        tag === "INPUT" ||
+                        tag === "TEXTAREA" ||
+                        tag === "SELECT" ||
+                        active.isContentEditable
+                    )
+                ) {
+                    return;
+                }
             }
 
-            setTimeout(function () {
-                try { input.focus(); } catch (e) {}
-            }, 50);
+            if (active !== input) {
+                try {
+                    input.removeAttribute("readonly");
+                    input.focus();
+                    setTimeout(function () {
+                        try { input.setAttribute("readonly", "readonly"); } catch (e) {}
+                    }, 50);
+                } catch (e) {}
+            }
 
-            setInterval(function () {
-                const liveScan = $("liveScanScreen");
-                const isLiveScanOpen = liveScan && !liveScan.classList.contains("hidden");
+        }, 500);
 
-                if (isLiveScanOpen && document.activeElement !== input) {
-                    try {
-                        input.focus();
-                    } catch (e) {}
-                }
-            }, 500);
-        });
+        console.log("[RFID] GLOBAL AUTO-FOCUS aktif.");
     }
 
     /* ==========================================================
@@ -1563,17 +1579,15 @@
             };
         }
 
-        const manualBtn = $("manualAttendanceButton");
-        if (manualBtn) {
-            manualBtn.onclick = function () {
-                populateManualModal();
-                const modal = $("manualAttendanceModal");
-                if (modal) {
-                    modal.classList.remove("hidden");
-                    modal.style.display = "flex";
-                }
-            };
+                /* ==========================================================
+           FIX: BIND BUTANG SIMPAN MANUAL
+           ========================================================== */
+        const saveManualBtn = $("saveManualAttendance");
+        if (saveManualBtn) {
+            saveManualBtn.onclick = saveManualAttendance;
+            console.log("[RFID] SAVE MANUAL BUTTON BOUND");
         }
+        /* ========================================================== */
 
         const exportCsvBtn = $("exportCsvButton");
         if (exportCsvBtn) exportCsvBtn.onclick = exportAttendanceCSV;
