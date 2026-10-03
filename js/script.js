@@ -2427,17 +2427,35 @@ async function refreshStatisticsData() {
 
         console.log("[DM3 RFID] INITIALIZING RFID HANDLERS");
 
-        document.addEventListener("click", function (event) {
+                document.addEventListener("click", function (event) {
 
+            // ==========================================================
+            // FIX: Butang Kehadiran Manual — TANGKAP id sebenar
+            // ==========================================================
             const manualButton = event.target.closest(
-                "#manual-attendance-btn, [data-action='manual-attendance']"
+                "#manualAttendanceButton, #manual-attendance-btn, [data-action='manual-attendance']"
             );
 
             if (manualButton) {
                 event.preventDefault();
                 event.stopPropagation();
-                console.log("[DM3 RFID] OPEN MANUAL ATTENDANCE");
-                openManualAttendanceModal();
+
+                console.log("[DM3 RFID] OPEN MANUAL ATTENDANCE — dari script.js");
+
+                // Panggil fungsi rfid.js kalau ada
+                if (window.DM3_RFID && typeof window.DM3_RFID.openManualModal === "function") {
+                    window.DM3_RFID.openManualModal();
+                } else {
+                    // Fallback: buka modal terus
+                    if (typeof populateManualModal === "function") {
+                        populateManualModal();
+                    }
+                    const modal = document.getElementById("manualAttendanceModal");
+                    if (modal) {
+                        modal.classList.remove("hidden");
+                        modal.style.display = "flex";
+                    }
+                }
                 return;
             }
 
