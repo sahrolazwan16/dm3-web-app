@@ -1601,20 +1601,6 @@
         const exportEmailBtn = $("exportEmailButton");
         if (exportEmailBtn) exportEmailBtn.onclick = exportAttendanceEmail;
 
-        document.addEventListener("click", function (event) {
-            const closeEl = event.target.closest("[data-close-modal]");
-            if (!closeEl) return;
-
-            const modalId = closeEl.getAttribute("data-close-modal");
-            if (!modalId) return;
-
-            const modal = $(modalId);
-            if (!modal) return;
-
-            modal.classList.add("hidden");
-            modal.style.display = "none";
-        });
-
         document.addEventListener("keydown", function (event) {
             if (event.key === "Escape") {
                 const liveScanModal = $("liveScanScreen");
