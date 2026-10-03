@@ -2459,6 +2459,9 @@ async function refreshStatisticsData() {
                 return;
             }
 
+                        // ==========================================================
+            // FIX: Close button — HANYA kalau benar-benar klik close
+            // ==========================================================
             const closeButton = event.target.closest(`
     [data-close-modal="manualAttendanceModal"],
     [data-close-manual-attendance],
@@ -2466,13 +2469,21 @@ async function refreshStatisticsData() {
     #manualAttendanceModal .modal-close
 `);
 
-if (closeButton && closeButton.closest("#manualAttendanceModal")) {
-    event.preventDefault();
-    event.stopPropagation();
-    console.log("[DM3 RFID] CLOSE BUTTON CLICKED");
-    closeManualAttendanceModal();
-    return;
-}
+            if (closeButton) {
+                // Semak: pastikan bukan klik butang manualAttendanceButton
+                const isManualBtn = event.target.closest("#manualAttendanceButton");
+
+                if (isManualBtn) {
+                    // Ini bukan close, ini butang buka — SKIP
+                    return;
+                }
+
+                event.preventDefault();
+                event.stopPropagation();
+                console.log("[DM3 RFID] CLOSE BUTTON CLICKED — betul");
+                closeManualAttendanceModal();
+                return;
+            }
 
             const testButton = event.target.closest(
                 "#rfid-test-mode, [data-action='rfid-test']"
