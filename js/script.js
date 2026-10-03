@@ -2494,7 +2494,7 @@ if (closeButton && closeButton.closest("#manualAttendanceModal")) {
             }
         });
 
-        const manualModal = document.getElementById("manualAttendanceModal");
+                const manualModal = document.getElementById("manualAttendanceModal");
 
         if (manualModal) {
             manualModal.addEventListener("click", function (event) {
@@ -2504,9 +2504,80 @@ if (closeButton && closeButton.closest("#manualAttendanceModal")) {
             });
         }
 
+        // ==========================================================
+        // FIX: BIND BUTANG SIMPAN MANUAL ATTENDANCE
+        // Elak butang tak berfungsi sebab listener tak dipasang
+        // ==========================================================
+        document.addEventListener("click", async function (event) {
+
+            const saveBtn = event.target.closest("#saveManualAttendance");
+
+            if (!saveBtn) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            console.log("=== MANUAL SAVE START ===");
+
+            const memberEl = document.getElementById("manualMember");
+            const programEl = document.getElementById("manualProgram");
+            const dateEl = document.getElementById("manualDate");
+
+            const memberId = memberEl ? memberEl.value : "";
+            const programId = programEl ? programEl.value : "";
+            const tarikh = dateEl ? dateEl.value : "";
+
+            if (!memberId) {
+                showToast("Sila pilih ahli.", "warning");
+                return;
+            }
+
+            if (!programId) {
+                showToast("Sila pilih program.", "warning");
+                return;
+            }
+
+            try {
+                if (typeof showLoading === "function") {
+                    showLoading("Menyimpan kehadiran...");
+                }
+
+                const res = await dm3Request("addAttendanceManual", {
+                    memberId: memberId,
+                    programId: programId,
+                    tarikh: tarikh
+                });
+
+                console.log("MANUAL SAVE RESULT:", res);
+
+                if (res && res.success === true) {
+                    showToast(res.message || "Kehadiran manual disimpan.", "success");
+                    closeManualAttendanceModal();
+
+                    // Reload senarai kehadiran
+                    setTimeout(function () {
+                        location.reload();
+                    }, 800);
+                } else {
+                    showToast(
+                        (res && res.message) || "Gagal simpan kehadiran.",
+                        "error"
+                    );
+                }
+
+            } catch (err) {
+                console.error("MANUAL SAVE ERROR:", err);
+                showToast("Ralat: " + (err.message || err), "error");
+            } finally {
+                if (typeof hideLoading === "function") {
+                    hideLoading();
+                }
+            }
+        }, true);
+        // ==========================================================
+
         console.log("DM3 RFID HANDLER: READY");
     }
-
 
     /* ======================================================================
        57. OFFLINE SYNC BADGE
