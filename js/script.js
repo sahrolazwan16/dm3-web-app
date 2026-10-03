@@ -2432,7 +2432,7 @@ async function refreshStatisticsData() {
             // ==========================================================
             // FIX: Butang Kehadiran Manual — TANGKAP id sebenar
             // ==========================================================
-            const manualButton = event.target.closest(
+                        const manualButton = event.target.closest(
                 "#manualAttendanceButton, #manual-attendance-btn, [data-action='manual-attendance']"
             );
 
@@ -2440,21 +2440,51 @@ async function refreshStatisticsData() {
                 event.preventDefault();
                 event.stopPropagation();
 
-                console.log("[DM3 RFID] OPEN MANUAL ATTENDANCE — dari script.js");
+                console.log("[DM3 RFID] OPEN MANUAL ATTENDANCE");
 
-                // Panggil fungsi rfid.js kalau ada
-                if (window.DM3_RFID && typeof window.DM3_RFID.openManualModal === "function") {
-                    window.DM3_RFID.openManualModal();
-                } else {
-                    // Fallback: buka modal terus
-                    if (typeof populateManualModal === "function") {
-                        populateManualModal();
-                    }
-                    const modal = document.getElementById("manualAttendanceModal");
-                    if (modal) {
-                        modal.classList.remove("hidden");
-                        modal.style.display = "flex";
-                    }
+                // ==========================================================
+                // POPULATE + BUKA MODAL TERUS
+                // ==========================================================
+                const memberSelect = document.getElementById("manualMember");
+                const programSelect = document.getElementById("manualProgram");
+                const dateInput = document.getElementById("manualDate");
+
+                // Populate members
+                if (memberSelect && window.DM3_STATE && Array.isArray(window.DM3_STATE.members)) {
+                    memberSelect.innerHTML = '<option value="">-- Pilih Ahli --</option>';
+                    window.DM3_STATE.members.forEach(function (m) {
+                        const opt = document.createElement("option");
+                        opt.value = m.id || m.ID || "";
+                        opt.textContent = (m.nama || m.Nama || "-") + (m.noRumah ? " — Rumah " + m.noRumah : "");
+                        memberSelect.appendChild(opt);
+                    });
+                }
+
+                // Populate programs
+                if (programSelect && window.DM3_STATE && Array.isArray(window.DM3_STATE.programs)) {
+                    programSelect.innerHTML = '<option value="">-- Pilih Program --</option>';
+                    window.DM3_STATE.programs.forEach(function (p) {
+                        const opt = document.createElement("option");
+                        opt.value = p.id || p.ID || "";
+                        opt.textContent = p.nama || p.namaProgram || p.Nama || "Program";
+                        programSelect.appendChild(opt);
+                    });
+                }
+
+                // Set tarikh hari ini
+                if (dateInput && !dateInput.value) {
+                    const today = new Date();
+                    dateInput.value = today.getFullYear() + "-" +
+                                     String(today.getMonth() + 1).padStart(2, "0") + "-" +
+                                     String(today.getDate()).padStart(2, "0");
+                }
+
+                // Buka modal
+                const modal = document.getElementById("manualAttendanceModal");
+                if (modal) {
+                    modal.classList.remove("hidden");
+                    modal.style.display = "flex";
+                    console.log("[DM3 RFID] Modal OPEN, members:", memberSelect ? memberSelect.options.length : 0, "programs:", programSelect ? programSelect.options.length : 0);
                 }
                 return;
             }
@@ -2462,25 +2492,18 @@ async function refreshStatisticsData() {
                         // ==========================================================
             // FIX: Close button — HANYA kalau benar-benar klik close
             // ==========================================================
-            const closeButton = event.target.closest(`
-    [data-close-modal="manualAttendanceModal"],
-    [data-close-manual-attendance],
-    #closeManualAttendance,
-    #manualAttendanceModal .modal-close
-`);
+                        // HANYA tangani close button yang sebenar
+            const modalCloseEl = event.target.closest(
+                "[data-close-modal='manualAttendanceModal'], " +
+                "[data-close-manual-attendance], " +
+                "#closeManualAttendance, " +
+                "#manualAttendanceModal .modal-close"
+            );
 
-            if (closeButton) {
-                // Semak: pastikan bukan klik butang manualAttendanceButton
-                const isManualBtn = event.target.closest("#manualAttendanceButton");
-
-                if (isManualBtn) {
-                    // Ini bukan close, ini butang buka — SKIP
-                    return;
-                }
-
+            if (modalCloseEl && !event.target.closest("#manualAttendanceButton")) {
                 event.preventDefault();
                 event.stopPropagation();
-                console.log("[DM3 RFID] CLOSE BUTTON CLICKED — betul");
+                console.log("[DM3 RFID] CLOSE BUTTON — user klik close");
                 closeManualAttendanceModal();
                 return;
             }
@@ -2533,76 +2556,7 @@ async function refreshStatisticsData() {
             });
         }
 
-        // ==========================================================
-        // FIX: BIND BUTANG SIMPAN MANUAL ATTENDANCE
-        // Elak butang tak berfungsi sebab listener tak dipasang
-        // ==========================================================
-        document.addEventListener("click", async function (event) {
-
-            const saveBtn = event.target.closest("#saveManualAttendance");
-
-            if (!saveBtn) return;
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            console.log("=== MANUAL SAVE START ===");
-
-            const memberEl = document.getElementById("manualMember");
-            const programEl = document.getElementById("manualProgram");
-            const dateEl = document.getElementById("manualDate");
-
-            const memberId = memberEl ? memberEl.value : "";
-            const programId = programEl ? programEl.value : "";
-            const tarikh = dateEl ? dateEl.value : "";
-
-            if (!memberId) {
-                showToast("Sila pilih ahli.", "warning");
-                return;
-            }
-
-            if (!programId) {
-                showToast("Sila pilih program.", "warning");
-                return;
-            }
-
-            try {
-                if (typeof showLoading === "function") {
-                    showLoading("Menyimpan kehadiran...");
-                }
-
-                const res = await dm3Request("addAttendanceManual", {
-                    memberId: memberId,
-                    programId: programId,
-                    tarikh: tarikh
-                });
-
-                console.log("MANUAL SAVE RESULT:", res);
-
-                if (res && res.success === true) {
-                    showToast(res.message || "Kehadiran manual disimpan.", "success");
-                    closeManualAttendanceModal();
-
-                    // Reload senarai kehadiran
-                    setTimeout(function () {
-                        location.reload();
-                    }, 800);
-                } else {
-                    showToast(
-                        (res && res.message) || "Gagal simpan kehadiran.",
-                        "error"
-                    );
-                }
-
-            } catch (err) {
-                console.error("MANUAL SAVE ERROR:", err);
-                showToast("Ralat: " + (err.message || err), "error");
-            } finally {
-                if (typeof hideLoading === "function") {
-                    hideLoading();
-                }
-            }
-        }, true);
+        
         // ==========================================================
 
         console.log("DM3 RFID HANDLER: READY");
