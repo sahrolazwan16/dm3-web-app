@@ -358,13 +358,10 @@
        HID SCANNER (keyboard wedge)
     ========================================================== */
 
-        function bindHIDScanner() {
+           function bindHIDScanner() {
         const input = $("rfid-hidden-input");
         if (!input) return;
 
-        // ==========================================================
-        // INPUT KEYDOWN — terima UID dari HID scanner
-        // ==========================================================
         input.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
                 event.preventDefault();
@@ -377,9 +374,7 @@
         });
 
         // ==========================================================
-        // FIX: AUTO-FOCUS GLOBAL — hanya SATU interval
-        // Setiap 500ms, paksa input RFID focus
-        // Terutama bila Live Scan aktif
+        // FIX: AUTO-FOCUS — kecualikan klik butang & form input
         // ==========================================================
         if (window.__DM3_RFID_AUTOFOCUS) {
             clearInterval(window.__DM3_RFID_AUTOFOCUS);
@@ -393,28 +388,36 @@
             const page = $("page-rfid");
             const isRfidPage = page && page.classList.contains("active");
 
-            // Aktifkan auto-focus hanya bila Live Scan ATAU page RFID aktif
             if (!isLiveScanOpen && !isRfidPage) return;
 
             const active = document.activeElement;
 
-            // Jangan rampas focus kalau user tengah taip dalam input/select lain
-            if (active) {
+            // ✅ PENGECUALIAN PENTING:
+            // Jangan rampas focus kalau user tengah klik:
+            // - Button (contoh: Kehadiran Manual, Live Scan)
+            // - Input/Select/Textarea
+            // - Apa-apa elemen interaktif
+            if (active && active !== document.body) {
                 const tag = (active.tagName || "").toUpperCase();
+
                 if (
-                    active !== input &&
-                    (
-                        tag === "INPUT" ||
-                        tag === "TEXTAREA" ||
-                        tag === "SELECT" ||
-                        active.isContentEditable
-                    )
+                    tag === "BUTTON" ||
+                    tag === "INPUT" ||
+                    tag === "SELECT" ||
+                    tag === "TEXTAREA" ||
+                    tag === "A" ||
+                    active.isContentEditable ||
+                    active.closest(".modal-dialog") ||
+                    active.closest("#manualAttendanceModal") ||
+                    active.closest("#liveScanScreen") && tag !== "BODY"
                 ) {
-                    return;
+                    return; // ← jangan ganggu
                 }
             }
 
-            if (active !== input) {
+            // Auto-focus HANYA bila Live Scan aktif
+            // atau bila tiada elemen interaktif aktif
+            if (isLiveScanOpen && active !== input) {
                 try {
                     input.removeAttribute("readonly");
                     input.focus();
@@ -426,7 +429,7 @@
 
         }, 500);
 
-        console.log("[RFID] GLOBAL AUTO-FOCUS aktif.");
+        console.log("[RFID] GLOBAL AUTO-FOCUS aktif (dengan pengecualian).");
     }
 
     /* ==========================================================
