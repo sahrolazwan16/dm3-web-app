@@ -1634,12 +1634,21 @@
                                      String(today.getDate()).padStart(2, "0");
                 }
 
-                // Buka modal + SET FLAG justOpened
+                                // Buka modal + SET FLAG justOpened
                 const modal = document.getElementById("manualAttendanceModal");
                 if (modal) {
-                    modal.classList.remove("hidden");
-                    modal.style.display = "flex";
+                    // ✅ RESET SEMUA STATE dari close lama
+                    modal.classList.remove("hidden", "closing");
+                    modal.classList.add("show", "active");
 
+                    modal.style.display = "flex";
+                    modal.style.visibility = "visible";
+                    modal.style.opacity = "1";
+                    modal.style.pointerEvents = "auto";
+                    modal.style.transform = "none";
+                    modal.style.zIndex = "100000";
+
+                    // Set flag justOpened (elak auto-tutup)
                     modal.dataset.justOpened = "1";
                     setTimeout(function () {
                         delete modal.dataset.justOpened;
