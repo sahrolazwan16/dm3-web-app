@@ -41,18 +41,7 @@
         addAttendanceAction: "addAttendanceManual",
         scanCooldownMs: 1500,
         serialBaudRate: 9600,
-        storageKeyProgram: "DM3_RFID_PROGRAM",
-
-        // ==========================================================
-        // OFFLINE QUEUE CONFIG
-        // ==========================================================
-        storageKeyMembersCache: "DM3_RFID_MEMBERS_CACHE",
-        storageKeyQueue: "DM3_RFID_QUEUE",
-        storageKeyLastSync: "DM3_RFID_LAST_SYNC",
-        syncIntervalMs: 30000,      // 30s cuba sync
-        maxQueueSize: 1000,          // Had queue
-        cacheDurationMs: 24 * 60 * 60 * 1000  // Cache sah 24 jam
-        // ==========================================================
+        storageKeyProgram: "DM3_RFID_PROGRAM"
     };
 
     /* ==========================================================
@@ -72,16 +61,7 @@
         programs: [],
         members: [],
         attendance: [],
-        testMode: false,
-
-        // ==========================================================
-        // OFFLINE QUEUE STATE
-        // ==========================================================
-        queue: [],
-        syncInProgress: false,
-        syncTimer: null,
-        onlineStatus: navigator.onLine
-        // ==========================================================
+        testMode: false
     };
 
     let attendanceRefreshTimer = null;
@@ -149,263 +129,6 @@
                String(n.getMinutes()).padStart(2, "0") + ":" +
                String(n.getSeconds()).padStart(2, "0");
     }
-
-        /* ==========================================================
-       OFFLINE QUEUE — SIMPAN SCAN SECARA LOKAL
-       ========================================================== */
-
-    function loadMembersCache() {
-        try {
-            const raw = localStorage.getItem(RFID_CONFIG.storageKeyMembersCache);
-            if (!raw) return null;
-
-            const data = JSON.parse(raw);
-
-            if (data.timestamp && (Date.now() - data.timestamp) > RFID_CONFIG.cacheDurationMs) {
-                console.log("[RFID QUEUE] Cache tamat tempoh, refresh nanti.");
-                return null;
-            }
-
-            return data.members || null;
-        } catch (e) {
-            console.warn("[RFID QUEUE] Load cache error:", e);
-            return null;
-        }
-    }
-
-
-    function saveMembersCache(members) {
-        try {
-            const data = {
-                members: members,
-                timestamp: Date.now()
-            };
-            localStorage.setItem(RFID_CONFIG.storageKeyMembersCache, JSON.stringify(data));
-            console.log("[RFID QUEUE] Members cache saved:", members.length, "rekod");
-        } catch (e) {
-            console.warn("[RFID QUEUE] Save cache error:", e);
-        }
-    }
-
-
-    function loadQueue() {
-        try {
-            const raw = localStorage.getItem(RFID_CONFIG.storageKeyQueue);
-            if (!raw) return [];
-            const data = JSON.parse(raw);
-            return Array.isArray(data) ? data : [];
-        } catch (e) {
-            console.warn("[RFID QUEUE] Load queue error:", e);
-            return [];
-        }
-    }
-
-
-    function saveQueue() {
-        try {
-            localStorage.setItem(RFID_CONFIG.storageKeyQueue, JSON.stringify(RFID_STATE.queue));
-        } catch (e) {
-            console.warn("[RFID QUEUE] Save queue error:", e);
-        }
-    }
-
-
-    function addToQueue(item) {
-        if (RFID_STATE.queue.length >= RFID_CONFIG.maxQueueSize) {
-            console.warn("[RFID QUEUE] Queue penuh! Buang rekod lama.");
-            RFID_STATE.queue.shift();
-        }
-
-        item.queuedAt = Date.now();
-        item.id = "Q-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5);
-        RFID_STATE.queue.push(item);
-        saveQueue();
-
-        console.log("[RFID QUEUE] Added. Queue size:", RFID_STATE.queue.length);
-        updateQueueBadge();
-    }
-
-
-    function updateQueueBadge() {
-        const count = RFID_STATE.queue.length;
-
-        // Update badge dalam Live Scan
-        const sidebar = document.querySelector(".live-scan-sidebar");
-        if (sidebar) {
-            let badge = sidebar.querySelector(".queue-badge");
-            if (!badge) {
-                badge = document.createElement("div");
-                badge.className = "queue-badge";
-                badge.style.cssText = `
-                    padding: 6px 12px;
-                    margin: 8px 0;
-                    border-radius: 8px;
-                    font-size: 11px;
-                    font-weight: 700;
-                    text-align: center;
-                    transition: all 0.3s;
-                `;
-                const title = sidebar.querySelector(".scan-sidebar-title");
-                if (title && title.nextSibling) {
-                    sidebar.insertBefore(badge, title.nextSibling);
-                }
-            }
-
-            if (count === 0) {
-                badge.style.background = "#dcfce7";
-                badge.style.color = "#16a34a";
-                badge.textContent = "🟢 SEMUA SYNCED";
-            } else if (navigator.onLine) {
-                badge.style.background = "#fef3c7";
-                badge.style.color = "#d97706";
-                badge.textContent = "🟡 PENDING: " + count;
-            } else {
-                badge.style.background = "#fee2e2";
-                badge.style.color = "#dc2626";
-                badge.textContent = "🔴 OFFLINE: " + count + " pending";
-            }
-        }
-
-        console.log("[RFID QUEUE] Badge updated. Pending:", count);
-    }
-
-
-    async function processQueue() {
-        if (RFID_STATE.syncInProgress) return;
-        if (RFID_STATE.queue.length === 0) return;
-        if (!navigator.onLine) {
-            console.log("[RFID QUEUE] Offline, skip sync.");
-            return;
-        }
-
-        RFID_STATE.syncInProgress = true;
-        console.log("[RFID QUEUE] Starting sync. Pending:", RFID_STATE.queue.length);
-
-        const queue = RFID_STATE.queue.slice();
-        let successCount = 0;
-        let failCount = 0;
-
-        for (let i = 0; i < queue.length; i++) {
-            const item = queue[i];
-
-            try {
-                const response = await apiRequest(RFID_CONFIG.recordAttendanceAction, {
-                    uid: item.uid,
-                    programId: item.programId,
-                    timestamp: item.timestamp || new Date().toISOString()
-                });
-
-                if (response && response.success) {
-                    // Buang dari queue
-                    RFID_STATE.queue = RFID_STATE.queue.filter(function (q) {
-                        return q.id !== item.id;
-                    });
-                    successCount++;
-                    console.log("[RFID QUEUE] Sync OK:", item.uid);
-                } else if (response && response.data && response.data.duplicate) {
-                    // Duplicate — buang juga dari queue
-                    RFID_STATE.queue = RFID_STATE.queue.filter(function (q) {
-                        return q.id !== item.id;
-                    });
-                    successCount++;
-                    console.log("[RFID QUEUE] Duplicate, removed:", item.uid);
-                } else {
-                    failCount++;
-                    console.warn("[RFID QUEUE] Sync fail:", item.uid, response && response.message);
-                    break; // Stop, cuba lagi nanti
-                }
-
-            } catch (e) {
-                console.error("[RFID QUEUE] Sync error:", e);
-                failCount++;
-                break;
-            }
-
-            // Jeda 300ms antara request
-            await new Promise(function (r) { setTimeout(r, 300); });
-        }
-
-        saveQueue();
-        updateQueueBadge();
-
-        if (successCount > 0) {
-            console.log("[RFID QUEUE] Synced:", successCount, "fail:", failCount);
-        }
-
-        RFID_STATE.syncInProgress = false;
-    }
-
-
-    function startQueueSync() {
-        if (RFID_STATE.syncTimer) {
-            clearInterval(RFID_STATE.syncTimer);
-        }
-
-        RFID_STATE.syncTimer = setInterval(function () {
-            processQueue();
-        }, RFID_CONFIG.syncIntervalMs);
-
-        // Sync sekali bila start
-        setTimeout(processQueue, 2000);
-
-        console.log("[RFID QUEUE] Sync timer started (30s)");
-    }
-
-
-    function stopQueueSync() {
-        if (RFID_STATE.syncTimer) {
-            clearInterval(RFID_STATE.syncTimer);
-            RFID_STATE.syncTimer = null;
-            console.log("[RFID QUEUE] Sync timer stopped");
-        }
-    }
-
-
-    function exportQueueCSV() {
-        if (RFID_STATE.queue.length === 0) {
-            showToast("Tiada queue untuk export.", "info");
-            return;
-        }
-
-        let csv = "TARIKH,MASA,UID,PROGRAM ID,NAMA\n";
-
-        RFID_STATE.queue.forEach(function (item) {
-            const tarikh = new Date(item.queuedAt).toLocaleString("ms-MY");
-            csv += '"' + tarikh + '",' +
-                   '"' + (item.masa || "-") + '",' +
-                   '"' + (item.uid || "-") + '",' +
-                   '"' + (item.programId || "-") + '",' +
-                   '"' + (item.nama || "-") + '"\n';
-        });
-
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "DM3_Queue_" + Date.now() + ".csv";
-        a.click();
-        URL.revokeObjectURL(url);
-
-        showToast("Queue CSV dimuat turun.", "success");
-    }
-
-
-    // Event listener untuk online/offline
-    window.addEventListener("online", function () {
-        console.log("[RFID QUEUE] Online balik, sync sekarang.");
-        updateQueueBadge();
-        setTimeout(processQueue, 1000);
-    });
-
-    window.addEventListener("offline", function () {
-        console.log("[RFID QUEUE] Offline.");
-        updateQueueBadge();
-    });
-
-
-    /* ==========================================================
-       AKHIR OFFLINE QUEUE
-       ========================================================== */
 
     /* ==========================================================
        FUNGSI ASAL — Cari ahli berdasarkan UID sahaja
@@ -639,53 +362,14 @@
         const input = $("rfid-hidden-input");
         if (!input) return;
 
-        // ==========================================================
-        // FIX: Pastikan value sampai ke handleUIDScanned
-        // ==========================================================
-        var scanBuffer = "";
-
         input.addEventListener("keydown", function (event) {
-            // Kumpul karakter UID
-            if (event.key && event.key.length === 1 && /[a-zA-Z0-9]/.test(event.key)) {
-                scanBuffer += event.key;
-                console.log("[RFID HID] Buffer:", scanBuffer);
-            }
-
-            // Bila Enter
             if (event.key === "Enter") {
                 event.preventDefault();
-
-                var uid = (input.value && input.value.trim()) || scanBuffer.trim();
-
-                console.log("[RFID HID] Enter. UID:", uid);
-
-                // Reset
+                const uid = input.value.trim();
                 input.value = "";
-                scanBuffer = "";
-
                 if (uid) {
                     handleUIDScanned(uid);
-                } else {
-                    console.warn("[RFID HID] UID kosong! Reader hantar ke tempat lain?");
                 }
-            }
-        });
-
-        // Tambah listener pada document sebagai fallback
-        document.addEventListener("keydown", function (event) {
-            // Hanya bila Live Scan atau page-rfid aktif
-            var liveScan = document.getElementById("liveScanScreen");
-            var isLiveScanOpen = liveScan && !liveScan.classList.contains("hidden");
-            var page = document.getElementById("page-rfid");
-            var isRfidPage = page && page.classList.contains("active");
-
-            if (!isLiveScanOpen && !isRfidPage) return;
-
-            // Kalau focus bukan pada input RFID, tapi user scan kad
-            var active = document.activeElement;
-            if (active && active.id !== "rfid-hidden-input") {
-                // Biar input ambil alih
-                return;
             }
         });
 
@@ -768,9 +452,6 @@
         const liveScanModal = $("liveScanScreen");
         const isLiveScan = liveScanModal && !liveScanModal.classList.contains("hidden");
 
-        // ==========================================================
-        // OFFLINE: Cari nama dari CACHE (instant, tak perlu internet)
-        // ==========================================================
         const member = findMemberByUid(uid);
         const timeStr = formatTimeNow();
 
@@ -784,14 +465,6 @@
             return;
         }
 
-        if (!RFID_STATE.selectedProgramId) {
-            showToast("Sila pilih program dahulu.", "warning");
-            return;
-        }
-
-        // ==========================================================
-        // OFFLINE: Tunjuk nama INSTANT (tak tunggu API)
-        // ==========================================================
         if (isLiveScan) {
             if (!member) {
                 showLiveScanMember(null, uid, "unknown", "Kad tidak didaftarkan");
@@ -799,42 +472,25 @@
                 return;
             }
 
-            // Papar nama + bunyi INSTANT
             showLiveScanMember(member, uid, "success", "");
-            addRecentScan(member, uid, timeStr, false);
+
+            recordAttendance(uid, false).then(function (result) {
+                if (result && result.duplicate) {
+                    const statusEl = $("liveScanStatus");
+                    if (statusEl) {
+                        statusEl.className = "scan-status warning";
+                        statusEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> SUDAH DIREKODKAN';
+                    }
+                    addRecentScan(member, uid, timeStr, true);
+                } else if (result && result.success) {
+                    addRecentScan(member, uid, timeStr, false);
+                    scheduleAttendanceRefresh();
+                }
+            });
+        } else {
+            showScanResult(uid);
+            recordAttendance(uid, false);
         }
-
-        // ==========================================================
-        // OFFLINE QUEUE: Simpan ke queue (bukan hantar terus)
-        // ==========================================================
-        const queueItem = {
-            uid: uid,
-            programId: RFID_STATE.selectedProgramId,
-            ahliId: member ? (member.id || member.ID || "") : "",
-            nama: member ? (member.nama || member.Nama || "") : "",
-            noRumah: member ? (member.noRumah || "") : "",
-            jawatan: member ? (member.jawatan || "Ahli") : "Ahli",
-            masa: timeStr,
-            timestamp: new Date().toISOString()
-        };
-
-        addToQueue(queueItem);
-
-        // Simpan attendance lokal (untuk paparan)
-        RFID_STATE.attendance.push(queueItem);
-
-        if (isLiveScan) {
-            updateLiveScanCount();
-        }
-
-        // ==========================================================
-        // OFFLINE QUEUE: Trigger sync segera (kalau online)
-        // ==========================================================
-        if (navigator.onLine) {
-            setTimeout(processQueue, 500);
-        }
-
-        console.log("[RFID QUEUE] Scan saved to queue. Total pending:", RFID_STATE.queue.length);
     }
 
     function showScanResult(uid) {
@@ -1971,35 +1627,8 @@
         bindEvents();
         updateStatusBadge(false);
 
-        // ==========================================================
-        // OFFLINE QUEUE: Load queue + start sync
-        // ==========================================================
-        RFID_STATE.queue = loadQueue();
-        console.log("[RFID QUEUE] Loaded queue:", RFID_STATE.queue.length, "items");
-        updateQueueBadge();
-        startQueueSync();
-        // ==========================================================
-
-        // ==========================================================
-        // OFFLINE CACHE: Cuba load cache dulu, kalau ada
-        // ==========================================================
-        const cachedMembers = loadMembersCache();
-        if (cachedMembers && cachedMembers.length > 0) {
-            RFID_STATE.members = cachedMembers;
-            console.log("[RFID QUEUE] Members dari cache:", cachedMembers.length);
-        }
-        // ==========================================================
-
         await loadMembers();
         await loadPrograms();
-
-        // ==========================================================
-        // OFFLINE CACHE: Simpan cache selepas load
-        // ==========================================================
-        if (RFID_STATE.members && RFID_STATE.members.length > 0) {
-            saveMembersCache(RFID_STATE.members);
-        }
-        // ==========================================================
 
         try {
             const lastProgram = localStorage.getItem(RFID_CONFIG.storageKeyProgram);
